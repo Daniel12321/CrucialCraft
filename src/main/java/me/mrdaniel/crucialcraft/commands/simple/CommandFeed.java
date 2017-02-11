@@ -21,7 +21,7 @@ public class CommandFeed extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		target.offer(Keys.FOOD_LEVEL, 20);
 		target.sendMessage(Text.of(TextColors.GOLD, "Your hunger was satisfied."));
 		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You satisfied ", TextColors.RED, target.getName(), TextColors.GOLD, "'s hunger.")));

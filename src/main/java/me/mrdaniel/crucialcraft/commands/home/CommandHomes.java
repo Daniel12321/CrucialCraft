@@ -25,23 +25,24 @@ public class CommandHomes extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		CCPlayerData data = target.get(CCPlayerData.class).get();
 		Map<String, Teleport> homes = data.getHomes();
-		if (homes.isEmpty()) { src.orElse(target).sendMessage(Text.of(TextColors.GOLD, "There are no homes set.")); return; }
+
+		src.orElse(target).sendMessage(Text.of(TextColors.GOLD, "You have ", TextColors.RED, homes.size(), " / ", super.getCrucialCraft().getConfig().getMaxHomes(target), TextColors.GOLD, " homes set", homes.isEmpty() ? "." : ":"));
+		if (homes.isEmpty()) { return; }
 
 		Builder txt = Text.builder();
 		for (String home : homes.keySet()) {
-			Teleport tp = homes.get(home);
 			if (!txt.toText().toPlain().equals("")) { txt.append(Text.of(TextColors.GOLD, ", ")); }
-			txt.append(this.getHomeText(home, tp));
+			txt.append(this.getHomeText(home));
 		}
-		src.orElse(target).sendMessages(Text.of(TextColors.GOLD, "Homes:"), txt.build());
+		src.orElse(target).sendMessage(txt.build());
 	}
 
 	@Nonnull
-	private Text getHomeText(@Nonnull final String name, @Nonnull final Teleport tp) {
-		return Text.builder().append(Text.of(TextColors.RED, name)).onHover(TextActions.showText(Text.of(TextColors.GOLD, "Teleport to ", TextColors.RED, name, TextColors.GOLD, "."))).onClick(TextActions.executeCallback(src -> tp.teleport(super.getCrucialCraft(), (Player)src))).build();
+	private Text getHomeText(@Nonnull final String name) {
+		return Text.builder().append(Text.of(TextColors.RED, name)).onHover(TextActions.showText(Text.of(TextColors.GOLD, "Teleport to ", TextColors.RED, name, TextColors.GOLD, "."))).onClick(TextActions.runCommand("/home " + name)).build();
 	}
 
 	@Override

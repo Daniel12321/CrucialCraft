@@ -18,7 +18,7 @@ public class CommandKit extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<String> kit = args.getOne("name");
 		if (!kit.isPresent()) { super.getCrucialCraft().getGame().getCommandManager().process(target, "kits"); return; }
 

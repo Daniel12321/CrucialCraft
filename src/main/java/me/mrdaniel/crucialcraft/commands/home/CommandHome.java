@@ -23,7 +23,7 @@ public class CommandHome extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		if (!args.<String>getOne("name").isPresent()) { super.getCrucialCraft().getGame().getCommandManager().process(target, "homes"); return; }
 		String name = args.<String>getOne("name").get();
 		Optional<Teleport> home = target.get(CCPlayerData.class).get().getHome(name);

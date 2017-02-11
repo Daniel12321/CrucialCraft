@@ -47,10 +47,12 @@ import me.mrdaniel.crucialcraft.commands.message.CommandReply;
 import me.mrdaniel.crucialcraft.commands.simple.CommandBroadcast;
 import me.mrdaniel.crucialcraft.commands.simple.CommandBurn;
 import me.mrdaniel.crucialcraft.commands.simple.CommandClearInventory;
+import me.mrdaniel.crucialcraft.commands.simple.CommandDelNewbieSpawn;
 import me.mrdaniel.crucialcraft.commands.simple.CommandEnderchest;
 import me.mrdaniel.crucialcraft.commands.simple.CommandFeed;
 import me.mrdaniel.crucialcraft.commands.simple.CommandFireball;
 import me.mrdaniel.crucialcraft.commands.simple.CommandFly;
+import me.mrdaniel.crucialcraft.commands.simple.CommandGamemode;
 import me.mrdaniel.crucialcraft.commands.simple.CommandGod;
 import me.mrdaniel.crucialcraft.commands.simple.CommandHat;
 import me.mrdaniel.crucialcraft.commands.simple.CommandHeal;
@@ -58,10 +60,12 @@ import me.mrdaniel.crucialcraft.commands.simple.CommandInvsee;
 import me.mrdaniel.crucialcraft.commands.simple.CommandKill;
 import me.mrdaniel.crucialcraft.commands.simple.CommandMOTD;
 import me.mrdaniel.crucialcraft.commands.simple.CommandMore;
+import me.mrdaniel.crucialcraft.commands.simple.CommandNear;
 import me.mrdaniel.crucialcraft.commands.simple.CommandNick;
 import me.mrdaniel.crucialcraft.commands.simple.CommandPing;
 import me.mrdaniel.crucialcraft.commands.simple.CommandRepair;
 import me.mrdaniel.crucialcraft.commands.simple.CommandRules;
+import me.mrdaniel.crucialcraft.commands.simple.CommandSetNewbieSpawn;
 import me.mrdaniel.crucialcraft.commands.simple.CommandSetSpawn;
 import me.mrdaniel.crucialcraft.commands.simple.CommandSnowball;
 import me.mrdaniel.crucialcraft.commands.simple.CommandSpawn;
@@ -69,12 +73,15 @@ import me.mrdaniel.crucialcraft.commands.simple.CommandSpawnMob;
 import me.mrdaniel.crucialcraft.commands.simple.CommandSpeed;
 import me.mrdaniel.crucialcraft.commands.simple.CommandSudo;
 import me.mrdaniel.crucialcraft.commands.simple.CommandSuicide;
+import me.mrdaniel.crucialcraft.commands.simple.CommandTime;
 import me.mrdaniel.crucialcraft.commands.simple.CommandVanish;
+import me.mrdaniel.crucialcraft.commands.simple.CommandWeather;
 import me.mrdaniel.crucialcraft.commands.simple.CommandWorkbench;
 import me.mrdaniel.crucialcraft.commands.tp.CommandBack;
 import me.mrdaniel.crucialcraft.commands.tp.CommandTP;
 import me.mrdaniel.crucialcraft.commands.tp.CommandTPHere;
 import me.mrdaniel.crucialcraft.commands.tp.CommandTPPos;
+import me.mrdaniel.crucialcraft.commands.tp.CommandTop;
 import me.mrdaniel.crucialcraft.commands.warp.CommandDelWarp;
 import me.mrdaniel.crucialcraft.commands.warp.CommandSetWarp;
 import me.mrdaniel.crucialcraft.commands.warp.CommandWarp;
@@ -87,12 +94,14 @@ import me.mrdaniel.crucialcraft.data.TeleportTranslator;
 import me.mrdaniel.crucialcraft.io.Config;
 import me.mrdaniel.crucialcraft.io.DataFile;
 import me.mrdaniel.crucialcraft.io.Kits;
+import me.mrdaniel.crucialcraft.listeners.ChatListener;
 import me.mrdaniel.crucialcraft.listeners.ClientListener;
 import me.mrdaniel.crucialcraft.listeners.PlayerListener;
+import me.mrdaniel.crucialcraft.listeners.WorldListener;
 import me.mrdaniel.crucialcraft.utils.ChoiceMaps;
 
 @Singleton
-@Plugin(id = "crucialcraft", name = "CrucialCraft", version = "1.0", description = "An easy-to-use plugin with all essential commands", authors = {"Mr_Daniel12321"})
+@Plugin(id = "crucialcraft", name = "CrucialCraft", version = "1.0.0", description = "An easy-to-use plugin with all essential commands", authors = {"Mr_Daniel12321"})
 public class CrucialCraft {
 
 	private final PluginContainer container;
@@ -126,6 +135,7 @@ public class CrucialCraft {
 
 		this.logger.info("Custom Data registered successfully.");
 	}
+
 	@Listener
 	public void onInit(@Nullable final GameInitializationEvent e) {
 		this.logger.info("Starting Plugin...");
@@ -141,6 +151,11 @@ public class CrucialCraft {
 
 		this.game.getEventManager().registerListeners(this, new ClientListener(this));
 		this.game.getEventManager().registerListeners(this, new PlayerListener(this));
+		this.game.getEventManager().registerListeners(this, new ChatListener(this));
+		this.game.getEventManager().registerListeners(this, new WorldListener(this));
+
+
+
 
 		// All Sources Commands
 		CommandSpec broadcast = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Broadcast Command")).arguments(GenericArguments.remainingJoinedStrings(Text.of("message"))).executor(new CommandBroadcast(this)).build();
@@ -164,6 +179,18 @@ public class CrucialCraft {
 		CommandSpec rules = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Rules Command")).executor(new CommandRules(this)).build();
 		this.game.getCommandManager().register(this, rules, "rules");
 
+		CommandSpec time = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Time Command")).arguments(GenericArguments.string(Text.of("time")), GenericArguments.optionalWeak(GenericArguments.string(Text.of("world")))).executor(new CommandTime(this)).build();
+		this.game.getCommandManager().register(this, time, "time");
+
+		CommandSpec weather = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Weather Command")).arguments(GenericArguments.string(Text.of("weather")), GenericArguments.optionalWeak(GenericArguments.longNum(Text.of("duration"))), GenericArguments.optionalWeak(GenericArguments.string(Text.of("world")))).executor(new CommandWeather(this)).build();
+		this.game.getCommandManager().register(this, weather, "weather");
+
+		CommandSpec delnewbiespawn = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | DelNewbieSpawn Command")).executor(new CommandDelNewbieSpawn(this)).build();
+		this.game.getCommandManager().register(this, delnewbiespawn, "delnewbiespawn");
+
+
+
+
 
 
 		// Player (or Player Specified) Commands
@@ -184,7 +211,7 @@ public class CrucialCraft {
 		CommandSpec fly = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Fly Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandFly(this)).build();
 		this.game.getCommandManager().register(this, fly, "fly");
 
-		CommandSpec speed = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Speed Command")).arguments(GenericArguments.doubleNum(Text.of("speed")), GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandSpeed(this)).build();
+		CommandSpec speed = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Speed Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other"))), GenericArguments.doubleNum(Text.of("speed"))).executor(new CommandSpeed(this)).build();
 		this.game.getCommandManager().register(this, speed, "speed");
 
 		CommandSpec ci = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | ClearInventory Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandClearInventory(this)).build();
@@ -203,7 +230,7 @@ public class CrucialCraft {
 		this.game.getCommandManager().register(this, workbench, "workbench", "craft", "craftingtable", "crafting");
 
 		CommandSpec vanish = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Vanish Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandVanish(this)).build();
-		this.game.getCommandManager().register(this, vanish, "vanish");
+		this.game.getCommandManager().register(this, vanish, "vanish", "v");
 
 		CommandSpec spawn = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Spawn Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandSpawn(this)).build();
 		this.game.getCommandManager().register(this, spawn, "spawn");
@@ -214,7 +241,7 @@ public class CrucialCraft {
 		CommandSpec tpjail = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | TPJail Command")).arguments(GenericArguments.string(Text.of("name")), GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandTPJail(this)).build();
 		this.game.getCommandManager().register(this, tpjail, "tpjail");
 
-		CommandSpec tppos = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | TPPos Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other"))), GenericArguments.optionalWeak(GenericArguments.world(Text.of("world"))), GenericArguments.doubleNum(Text.of("x")), GenericArguments.doubleNum(Text.of("y")), GenericArguments.doubleNum(Text.of("z"))).executor(new CommandTPPos(this)).build();
+		CommandSpec tppos = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | TPPos Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other"))), GenericArguments.optionalWeak(GenericArguments.string(Text.of("world"))), GenericArguments.doubleNum(Text.of("x")), GenericArguments.doubleNum(Text.of("y")), GenericArguments.doubleNum(Text.of("z"))).executor(new CommandTPPos(this)).build();
 		this.game.getCommandManager().register(this, tppos, "tppos");
 
 		CommandSpec back = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Back Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandBack(this)).build();
@@ -223,14 +250,23 @@ public class CrucialCraft {
 		CommandSpec homes = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Homes Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandHomes(this)).build();
 		this.game.getCommandManager().register(this, homes, "homes", "homelist");
 
-		CommandSpec home = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Home Command")).arguments(GenericArguments.optionalWeak(GenericArguments.string(Text.of("name")))).executor(new CommandHome(this)).build();
+		CommandSpec home = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Home Command")).arguments(GenericArguments.optionalWeak(GenericArguments.string(Text.of("name"))), GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandHome(this)).build();
 		this.game.getCommandManager().register(this, home, "home", "tphome");
 
 		CommandSpec spawnmob = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | SpawnMob Command")).arguments(GenericArguments.choices(Text.of("type"), this.choicemaps.getEnityTypes()), GenericArguments.optionalWeak(GenericArguments.integer(Text.of("amount")))).executor(new CommandSpawnMob(this)).build();
 		this.game.getCommandManager().register(this, spawnmob, "spawnmob");
 
-		CommandSpec nick = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Nick Command")).arguments(GenericArguments.string(Text.of("nick")), GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandNick(this)).build();
+		CommandSpec nick = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Nick Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other"))), GenericArguments.string(Text.of("nick"))).executor(new CommandNick(this)).build();
 		this.game.getCommandManager().register(this, nick, "nick");
+
+		CommandSpec gamemode = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Gamemode Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other"))), GenericArguments.string(Text.of("gamemode"))).executor(new CommandGamemode(this)).build();
+		this.game.getCommandManager().register(this, gamemode, "gamemode", "gm");
+
+		CommandSpec near = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Near Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandNear(this)).build();
+		this.game.getCommandManager().register(this, near, "near");
+
+		CommandSpec top = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Top Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("other")))).executor(new CommandTop(this)).build();
+		this.game.getCommandManager().register(this, top, "top");
 
 
 
@@ -272,6 +308,10 @@ public class CrucialCraft {
 		CommandSpec item = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Item Command")).arguments(GenericArguments.choices(Text.of("type"), this.choicemaps.getItemTypes()), GenericArguments.optionalWeak(GenericArguments.integer(Text.of("amount")))).executor(new CommandItem(this)).build();
 		this.game.getCommandManager().register(this, item, "item", "i");
 
+		CommandSpec setnewbiespawn = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | SetNewbieSpawn Command")).executor(new CommandSetNewbieSpawn(this)).build();
+		this.game.getCommandManager().register(this, setnewbiespawn, "setnewbiespawn");
+
+
 
 
 
@@ -307,6 +347,8 @@ public class CrucialCraft {
 
 
 
+
+
 		// PlayerTargetPlayer Commands
 		CommandSpec enderchest = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Enderchest Command")).arguments(GenericArguments.optionalWeak(GenericArguments.player(Text.of("target")))).executor(new CommandEnderchest(this)).build();
 		this.game.getCommandManager().register(this, enderchest, "enderchest");
@@ -321,19 +363,21 @@ public class CrucialCraft {
 
 
 
+
+
 		this.logger.info("Plugin Started succesfull.");
 
 		/*
 		 * Commands: 
-		 * enchant, firework, kit, skull, time, afk, info, list,
+		 * enchant, firework, kit, skull, afk, info, list,
 		 * mail, me, powertool, realname, seen, spawner, antioch,
-		 * gc, kickall, kill, lightning, mute, nuke,
-		 * remove/butcher, socialspy, spawnmob, weather,
-		 * jump, top, tpa, tpall, tpaall, tpaccept, tpahere, tphere,
+		 * gc, kickall, lightning, mute, nuke,
+		 * remove/butcher, socialspy,
+		 * jump, tpa, tpall, tpaall, tpaccept, tpahere, tphere,
 		 * break, tree, bigtree, book, customtext
 		 * 
 		 * Systems:
-		 * time, rankup, afk, chat
+		 * time, rankup, afk
 		*/
 	}
 

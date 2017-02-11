@@ -25,7 +25,7 @@ public class CommandMessage extends TargetPlayerCommand {
 		String srcname = (src.get() instanceof Player) ? ((Player) src.get()).getName() : "Console";
 
 		String msg = args.<String>getOne("message").get();
-		Text txt = src.get().hasPermission("cc.colors") ? TextUtils.toText(msg) : Text.of(msg);
+		Text txt = src.get().hasPermission("cc.colors.message") ? TextUtils.toText(msg) : Text.of(msg);
 
 		target.sendMessage(Text.of(TextColors.DARK_GRAY, srcname, TextColors.DARK_GRAY, " -> you: ", txt));
 		src.get().sendMessage(Text.of(TextColors.DARK_GRAY, "You -> ", target.getName(), TextColors.DARK_GRAY, ": ", txt));

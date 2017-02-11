@@ -23,7 +23,7 @@ public class CommandWarp extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<String> n = args.<String>getOne("name");
 
 		if (!n.isPresent()) { super.getCrucialCraft().getGame().getCommandManager().process(target, "warps"); return; }

@@ -35,6 +35,6 @@ public class CommandBurn extends TargetPlayerCommand {
 
 	@Override
 	public boolean canTargetSelf() {
-		return false;
+		return true;
 	}
 }

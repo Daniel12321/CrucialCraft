@@ -21,7 +21,7 @@ public class CommandWorkbench extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		target.openInventory(Inventory.builder().of(InventoryArchetypes.WORKBENCH).build(super.getCrucialCraft()), ServerUtils.getCause(super.getCrucialCraft().getContainer()));
 	}
 

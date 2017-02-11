@@ -24,7 +24,7 @@ public class CommandGamemode extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		GameMode gm;
 
 		String str = args.<String>getOne("gamemode").get().toLowerCase();

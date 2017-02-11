@@ -21,7 +21,7 @@ public class CommandExpSet extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		int value = args.<Integer>getOne("exp").get();
 		target.offer(Keys.TOTAL_EXPERIENCE, value);
 		target.sendMessage(Text.of(TextColors.GOLD, "Your exp was set to ", TextColors.RED, value, TextColors.GOLD, "."));

@@ -21,7 +21,7 @@ public class CommandSetWarp extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		String name = args.<String>getOne("name").get();
 		Teleport teleport = new Teleport(target.getLocation(), target.getHeadRotation());
 

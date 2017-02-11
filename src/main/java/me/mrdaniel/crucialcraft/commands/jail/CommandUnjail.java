@@ -25,7 +25,7 @@ public class CommandUnjail extends TargetPlayerCommand {
 	@Override
 	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		CCPlayerData data = target.get(CCPlayerData.class).get();
-		if (!data.getJailed()) { Messages.IS_NOT_JAILED.send(src); return; }
+		if (!data.getJailed()) { Messages.IS_NOT_JAILED.send(src.orElse(target)); return; }
 
 		data.setJailed(false);
 		target.offer(data);

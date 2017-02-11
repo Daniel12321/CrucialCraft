@@ -22,7 +22,7 @@ public class CommandItem extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		ItemType type = args.<ItemType>getOne("type").get();
 		int amount = args.<Integer>getOne("amount").orElse(1);
 

@@ -19,13 +19,18 @@ public abstract class TargetPlayerCommand extends PermissionCommand {
 
 	@Override
 	public void perform(final CommandSource src, final CommandContext args) {
-		Player target = args.<Player>getOne("target").get();
+		// Player target; // = args.<Player>getOne("target").get();
 
-		if (target.equals(src)) { 
-			if (this.canTargetSelf()) { this.execute(target, Optional.empty(), args); }
-			else { Messages.NO_TARGET_YOURSELF.send(src); }
+		if (args.<Player>getOne("target").isPresent()) {
+			Player target = args.<Player>getOne("target").get();
+			if (target.equals(src)) {
+				if (this.canTargetSelf()) { this.execute(target, Optional.empty(), args); }
+				else { Messages.NO_TARGET_YOURSELF.send(src); }
+			}
+			else { this.execute(target, Optional.of(src), args); }
 		}
-		else { this.execute(target, Optional.of(src), args); }
+		else if (this.canTargetSelf() && src instanceof Player) { this.execute((Player)src, Optional.empty(), args); }
+		else { Messages.NO_TARGET_YOURSELF.send(src); }
 	}
 
 	public abstract void execute(@Nonnull final Player target, @Nonnull final Optional<CommandSource> src, @Nonnull final CommandContext args);

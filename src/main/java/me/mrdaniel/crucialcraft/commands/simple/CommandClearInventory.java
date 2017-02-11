@@ -20,10 +20,10 @@ public class CommandClearInventory extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		target.getInventory().clear();
 		target.sendMessage(Text.of(TextColors.GOLD, "Your inventory was cleared."));
-		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.RED, target.getName(), "'s inventory was cleared.")));
+		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You cleared ", TextColors.RED, target.getName(), "'s inventory.")));
 	}
 
 	@Override

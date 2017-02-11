@@ -21,7 +21,7 @@ public class CommandHeal extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		target.offer(Keys.HEALTH, target.get(Keys.MAX_HEALTH).orElse(20.0));
 		target.sendMessage(Text.of(TextColors.GOLD, "You were fully healed."));
 		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You fully healed ", TextColors.RED, target.getName(), TextColors.GOLD, ".")));

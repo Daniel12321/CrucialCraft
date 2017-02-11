@@ -21,9 +21,9 @@ public class CommandHat extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<ItemStack> handOpt = target.getItemInHand(HandTypes.MAIN_HAND);
-		if (!handOpt.isPresent()) { Messages.NO_ITEM_IN_HAND.send(target); }
+		if (!handOpt.isPresent()) { Messages.NO_ITEM_IN_HAND.send(src.orElse(target)); }
 
 		target.setItemInHand(HandTypes.MAIN_HAND, target.getHelmet().orElse(null));
 		target.setHelmet(handOpt.get());

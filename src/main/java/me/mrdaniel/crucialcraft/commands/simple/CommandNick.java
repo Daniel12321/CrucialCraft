@@ -23,11 +23,11 @@ public class CommandNick extends PlayerCommand{
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<String> nick = args.<String>getOne("nick");
 
 		if (nick.isPresent()) {
-			if (nick.get().contains("&") && !src.orElse(target).hasPermission("cc.colors")) { Messages.NO_PERMISSION.send(src.orElse(target)); return; }
+			if (nick.get().contains("&") && !src.orElse(target).hasPermission("cc.colors.nick")) { Messages.NO_COLOR_PERMISSION.send(src.orElse(target)); return; }
 			target.sendMessage(Text.of(TextColors.GOLD, "Your nickname was set to ", TextUtils.toText(nick.get())));
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You set ", TextColors.RED, target.getName(), TextColors.GOLD, "'s nickname to", TextColors.RED, TextUtils.toText(nick.get()), TextColors.GOLD, ".")));
 		}
@@ -35,6 +35,7 @@ public class CommandNick extends PlayerCommand{
 			target.sendMessage(Text.of(TextColors.GOLD, "Your nickname was reset."));
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You reset ", TextColors.RED, target.getName(), TextColors.GOLD, "'s nickname.")));
 		}
+
 		CCPlayerData data = target.get(CCPlayerData.class).get();
 		data.setNick(nick.orElse(null));
 		target.offer(data);

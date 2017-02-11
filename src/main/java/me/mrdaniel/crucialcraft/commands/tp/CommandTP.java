@@ -53,6 +53,7 @@ public class CommandTP extends TargetPlayerCommand {
 	public String getPermission() {
 		return "cc.tp";
 	}
+
 	@Override
 	public boolean canTargetSelf() {
 		return false;

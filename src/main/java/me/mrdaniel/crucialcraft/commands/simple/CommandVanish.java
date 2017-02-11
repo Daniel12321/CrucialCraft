@@ -21,14 +21,16 @@ public class CommandVanish extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		if (target.get(Keys.VANISH).orElse(false)) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+		if (target.get(Keys.INVISIBLE).orElse(false)) {
 			target.offer(Keys.VANISH, false);
+			target.offer(Keys.INVISIBLE, false);
 			target.sendMessage(Text.of(TextColors.GOLD, "You are no longer invisible."));
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.RED, target.getName(), " is no longer invisible.")));
 		}
 		else {
 			target.offer(Keys.VANISH, true);
+			target.offer(Keys.INVISIBLE, true);
 			target.sendMessage(Text.of(TextColors.GOLD, "You are now invisible."));
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.RED, target.getName(), " is now invisible.")));
 		}

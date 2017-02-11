@@ -21,7 +21,7 @@ public class CommandFly extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		if (target.get(Keys.CAN_FLY).orElse(false)) {
 			target.offer(Keys.CAN_FLY, false);
 			target.offer(Keys.IS_FLYING, false);

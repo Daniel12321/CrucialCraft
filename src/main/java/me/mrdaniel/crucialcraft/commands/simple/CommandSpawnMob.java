@@ -28,7 +28,7 @@ public class CommandSpawnMob extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		EntityType type = args.<EntityType>getOne("type").get();
 		int amount = args.<Integer>getOne("amount").orElse(1);
 		if (amount < 1) { Messages.MUST_BE_POSITIVE.send(src.orElse(target)); return; }

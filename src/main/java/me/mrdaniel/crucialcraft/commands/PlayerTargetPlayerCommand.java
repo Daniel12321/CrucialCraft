@@ -15,31 +15,18 @@ public abstract class PlayerTargetPlayerCommand extends PermissionCommand {
 		super(cc);
 	}
 
-//	@Override
-//	public void perform(final CommandSource src, CommandContext args) {
-//		if (src instanceof Player) {
-//			Player source = (Player) src;
-//			Player target = (args.getOne("target").isPresent()) ? args.<Player>getOne("target").get() : source;
-//			this.perform(target, source, args);
-//		}
-//		else { Messages.NOT_PLAYER.send(src); }
-//	}
-
 	@Override
 	public void perform(final CommandSource src, final CommandContext args) {
 		if (!(src instanceof Player)) { Messages.NOT_PLAYER.send(src); return; }
-
 		Player source = (Player) src;
-		Player target = args.<Player>getOne("target").get();
 
-		if (source.equals(target) && !this.canTargetSelf()) { Messages.NO_TARGET_YOURSELF.send(source); return; }
-
-		this.execute(target, source, args);
-	}
-
-	public void execute(final Player target, final CommandSource src, final CommandContext args) {
-		if (!(src instanceof Player)) { Messages.NOT_PLAYER.send(src); return; }
-		this.execute(target, (Player)src, args) ;
+		if (args.<Player>getOne("target").isPresent()) {
+			Player target = args.<Player>getOne("target").get();
+			if (target.equals(source) && !this.canTargetSelf()) { Messages.NO_TARGET_YOURSELF.send(source); }
+			else { this.execute(target, source, args); }
+		}
+		else if (this.canTargetSelf()) { this.execute(source, source, args); }
+		else { Messages.NO_TARGET_YOURSELF.send(src); }
 	}
 
 	public abstract void execute(@Nonnull final Player target, @Nonnull final Player src, @Nonnull final CommandContext args);

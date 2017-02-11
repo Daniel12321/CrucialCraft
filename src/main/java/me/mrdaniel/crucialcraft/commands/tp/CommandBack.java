@@ -23,7 +23,7 @@ public class CommandBack extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		CCPlayerData data = target.get(CCPlayerData.class).get();
 		if (data.getLastLocation().isPresent()) {
 			Teleport tp = data.getLastLocation().get();

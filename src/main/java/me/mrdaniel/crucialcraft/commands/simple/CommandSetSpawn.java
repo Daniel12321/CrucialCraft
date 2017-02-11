@@ -21,7 +21,7 @@ public class CommandSetSpawn extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		super.getCrucialCraft().getDataFile().setSpawn(new Teleport(target.getLocation(), target.getHeadRotation()));
 		target.sendMessage(Text.of(TextColors.GOLD, "You set the spawn point to your location."));
 	}

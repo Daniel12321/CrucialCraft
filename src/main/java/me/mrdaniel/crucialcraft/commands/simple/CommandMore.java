@@ -23,9 +23,9 @@ public class CommandMore extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<ItemStack> itemOpt = target.getItemInHand(HandTypes.MAIN_HAND);
-		if (!itemOpt.isPresent()) { Messages.NO_ITEM_IN_HAND.send(target); return; }
+		if (!itemOpt.isPresent()) { Messages.NO_ITEM_IN_HAND.send(src.orElse(target)); return; }
 		ItemStack item = itemOpt.get();
 
 		item.setQuantity(item.getMaxStackQuantity());

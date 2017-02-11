@@ -23,7 +23,7 @@ public class CommandDelHome extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		String name = args.<String>getOne("name").get();
 
 		CCPlayerData data = target.get(CCPlayerData.class).get();

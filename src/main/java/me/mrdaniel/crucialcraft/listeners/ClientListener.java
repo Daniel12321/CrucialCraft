@@ -37,14 +37,12 @@ public class ClientListener extends CCObject {
 				}
 				else {
 					e.setCancelled(true);
-					Text[] bantext = super.getCrucialCraft().getConfig().getTempBanMessage(ban.getReason().orElse(Text.of("Not Specified.")), ban.getBanSource().orElse(Text.of("the server")), TextUtils.getTimeRemainingFormat(ban.getExpirationDate().get()));
-					e.setMessage(bantext[0], bantext[1], bantext[2]);
+					e.setMessage(super.getCrucialCraft().getConfig().getTempBanMessage(ban.getReason().orElse(Text.of("Not Specified.")), ban.getBanSource().orElse(Text.of("the server")), TextUtils.getTimeRemainingFormat(ban.getExpirationDate().get())));
 				}
 			}
 			else {
 				e.setCancelled(true);
-				Text[] bantext = super.getCrucialCraft().getConfig().getBanMessage(ban.getReason().orElse(Text.of("Not Specified.")), ban.getBanSource().orElse(Text.of("the server")));
-				e.setMessage(bantext[0], bantext[1], bantext[2]);
+				e.setMessage(super.getCrucialCraft().getConfig().getBanMessage(ban.getReason().orElse(Text.of("Not Specified.")), ban.getBanSource().orElse(Text.of("the server"))));
 			}
 		}
 		else if (super.getCrucialCraft().getGame().getServer().hasWhitelist()) {

@@ -25,21 +25,22 @@ public class CommandNear extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		List<Player> near = target.getWorld().getEntities().stream().filter(ent -> ent instanceof Player && ent.getLocation().getPosition().distance(target.getLocation().getPosition()) <= 150).map(ent -> (Player)ent).collect(Collectors.toList());
-		if (near.isEmpty()) { target.sendMessage(Text.of(TextColors.GOLD, "There are no players near you")); return; }
+		near.remove(target);
+		if (near.isEmpty()) { target.sendMessage(Text.of(TextColors.GOLD, "There are no players near you.")); return; }
 
 		Builder txt = Text.builder().append(this.getPlayerText(near.get(0), target.getLocation().getPosition()));
 		for (int i = 1; i < near.size(); i++) {
 			txt.append(Text.of(TextColors.GOLD, ", "), this.getPlayerText(near.get(i), target.getLocation().getPosition()));
 		}
-		
-		near.forEach(player -> target.sendMessage(Text.of(TextColors.RED, player.getName(), TextColors.GOLD, " (", (int) target.getLocation().getPosition().distance(player.getLocation().getPosition()), "m)")));
+
+		target.sendMessages(Text.of(TextColors.GOLD, "Players near you:"), txt.build());
 	}
 
 	@Nonnull
 	private Text getPlayerText(@Nonnull final Player p, @Nonnull final Vector3d from) {
-		return Text.builder().append(Text.of(TextColors.RED, p.getName(), TextColors.GOLD, "(", (int)p.getLocation().getPosition().distance(from), "m)")).build();
+		return Text.builder().append(Text.of(TextColors.RED, p.getName(), TextColors.GOLD, " (", (int)p.getLocation().getPosition().distance(from), "m)")).build();
 	}
 
 	@Override

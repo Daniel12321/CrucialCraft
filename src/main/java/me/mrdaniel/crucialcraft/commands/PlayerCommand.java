@@ -22,12 +22,12 @@ public abstract class PlayerCommand extends PermissionCommand {
 		if (args.<Player>getOne("other").isPresent()) {
 			Player target = args.<Player>getOne("other").get();
 
-			if (target.equals(src)) { this.perform(target, Optional.empty(), args); }
-			else { this.perform(target, Optional.of(src), args); }
+			if (target.equals(src)) { this.execute(target, Optional.empty(), args); }
+			else { this.execute(target, Optional.of(src), args); }
 		}
-		else if (src instanceof Player) { this.perform((Player)src, Optional.empty(), args); }
+		else if (src instanceof Player) { this.execute((Player)src, Optional.empty(), args); }
 		else { Messages.NOT_PLAYER.send(src); }
 	}
 
-	public abstract void perform(@Nonnull final Player target, @Nonnull final Optional<CommandSource> src, @Nonnull final CommandContext args);
+	public abstract void execute(@Nonnull final Player target, @Nonnull final Optional<CommandSource> src, @Nonnull final CommandContext args);
 }

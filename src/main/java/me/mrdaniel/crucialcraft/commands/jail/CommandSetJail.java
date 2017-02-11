@@ -21,7 +21,7 @@ public class CommandSetJail extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		String name = args.<String>getOne("name").get();
 		super.getCrucialCraft().getDataFile().setJail(name, new Teleport(target.getLocation(), target.getHeadRotation()));
 		target.sendMessage(Text.of(TextColors.GOLD, "You set jail ", TextColors.RED, name, TextColors.GOLD, " to your location."));

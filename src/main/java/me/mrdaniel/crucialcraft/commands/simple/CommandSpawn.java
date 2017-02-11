@@ -22,9 +22,9 @@ public class CommandSpawn extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<Teleport> sp = super.getCrucialCraft().getDataFile().getSpawn();
-		if (!sp.isPresent()) { Messages.SPAWN_NOT_SET.send(target).send(src); return; }
+		if (!sp.isPresent()) { Messages.SPAWN_NOT_SET.send(src.orElse(target)); return; }
 		Teleport spawn = sp.get();
 
 		if (spawn.teleport(super.getCrucialCraft(), target)) {

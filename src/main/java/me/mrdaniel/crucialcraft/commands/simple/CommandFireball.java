@@ -22,9 +22,10 @@ public class CommandFireball extends PlayerCommand {
 	}
 
 	@Override
-	public void perform(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
 		ProjectileUtils.launchProjectile(target, LargeFireball.class, 3);
-		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You made ", TextColors.RED, target.getName(), TextColors.GOLD, " shoot a fireball.")));
+		target.sendMessage(Text.of(TextColors.GOLD, "You launched a fireball."));
+		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You made ", TextColors.RED, target.getName(), TextColors.GOLD, " launch a fireball.")));
 	}
 
 	@Override

@@ -11,16 +11,6 @@ import com.google.common.collect.Lists;
 
 public class PermissionsUtils {
 
-	@Nonnull
-	public static String getPrefix(@Nonnull final Player p) {
-		return p.getContainingCollection().get(p.getIdentifier()).getOption("prefix").orElse("");
-	}
-
-	@Nonnull
-	public static String getSuffix(@Nonnull final Player p) {
-		return p.getContainingCollection().get(p.getIdentifier()).getOption("suffix").orElse("");
-	}
-
 	public static List<String> getGroups(@Nonnull final Player p) {
 
 		List<String> groups = Lists.newArrayList();
@@ -32,11 +22,12 @@ public class PermissionsUtils {
 		return groups;
 	}
 
-//	public static int getHomeLimit(@Nonnull final Player player) {
-//    	Subject subject = player.getContainingCollection().get(player.getIdentifier());
-//		String o = subject.getOption("homes").orElse("");
-//		if (o.equalsIgnoreCase("") || o.equalsIgnoreCase("unlimited")) return Integer.MAX_VALUE;
-//		try { return Integer.parseInt(o); }
-//		catch(NumberFormatException e) { return 0; }
-//	}
+	public static int getMaxHomes(@Nonnull final Player player) {
+    	Subject subject = player.getContainingCollection().get(player.getIdentifier());
+		String o = subject.getOption("homes").orElse(subject.getOption("home").orElse(""));
+
+		if (o.equalsIgnoreCase("-1") || o.equalsIgnoreCase("unlimited")) return Integer.MAX_VALUE;
+		try { return Integer.parseInt(o); }
+		catch (final NumberFormatException e) { return 0; }
+	}
 }
