@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
@@ -60,24 +61,34 @@ public class ClientListener extends CCObject {
 
 	@Listener(order = Order.LATE)
 	public void onJoin(final ClientConnectionEvent.Join e) {
+		if (!e.getTargetEntity().get(CCPlayerData.class).isPresent()) { this.onFirstJoin(e.getTargetEntity()); }
+
 		e.setMessage(super.getCrucialCraft().getConfig().getLoginMessage(e.getTargetEntity().getName()));
 		e.getTargetEntity().sendMessages(super.getCrucialCraft().getConfig().getMotd(e.getTargetEntity().getName(), super.getCrucialCraft().getGame().getServer().getOnlinePlayers().size(), super.getCrucialCraft().getGame().getServer().getMaxPlayers()));
 
-		if (!e.getTargetEntity().get(CCPlayerData.class).isPresent()) {
-			ServerUtils.broadcast(super.getCrucialCraft().getGame().getServer(), super.getCrucialCraft().getConfig().getFirstJoinMessage(e.getTargetEntity().getName()));
-			e.getTargetEntity().offer(new CCPlayerData(super.getCrucialCraft()));
-			Optional<Teleport> newbiespawn = super.getCrucialCraft().getDataFile().getNewbieSpawn();
-			if (!(newbiespawn.isPresent() && newbiespawn.get().teleport(super.getCrucialCraft(), e.getTargetEntity()))) {
-				super.getCrucialCraft().getDataFile().getSpawn().ifPresent(spawn -> spawn.teleport(super.getCrucialCraft(), e.getTargetEntity()));
-			}
+		CCPlayerData data = e.getTargetEntity().get(CCPlayerData.class).get();
+		data.setLastLogin(System.currentTimeMillis());
+		e.getTargetEntity().offer(data);
+	}
 
-			// New Player
-			
+	private void onFirstJoin(@Nonnull final Player p) {
+		p.offer(new CCPlayerData());
+
+		ServerUtils.broadcast(super.getCrucialCraft().getGame().getServer(), super.getCrucialCraft().getConfig().getFirstJoinMessage(p.getName()));
+
+		Optional<Teleport> newbiespawn = super.getCrucialCraft().getDataFile().getNewbieSpawn();
+		if (!(newbiespawn.isPresent() && newbiespawn.get().teleport(super.getCrucialCraft(),p))) {
+			super.getCrucialCraft().getDataFile().getSpawn().ifPresent(spawn -> spawn.teleport(super.getCrucialCraft(), p));
 		}
 	}
 
 	@Listener(order = Order.LATE)
 	public void onQuit(final ClientConnectionEvent.Disconnect e) {
 		e.setMessage(super.getCrucialCraft().getConfig().getLogoutMessage(e.getTargetEntity().getName()));
+
+		CCPlayerData data = e.getTargetEntity().get(CCPlayerData.class).get();
+		data.setLastLogout(System.currentTimeMillis());
+		data.setPlaytime(data.getCurrentPlaytime());
+		e.getTargetEntity().offer(data);
 	}
 }

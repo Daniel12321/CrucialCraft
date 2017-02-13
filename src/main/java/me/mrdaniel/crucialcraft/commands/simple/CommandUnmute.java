@@ -7,30 +7,31 @@ import javax.annotation.Nonnull;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.entity.projectile.Snowball;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.utils.ProjectileUtils;
+import me.mrdaniel.crucialcraft.data.CCPlayerData;
 
-public class CommandSnowball extends TargetPlayerCommand {
+public class CommandUnmute extends TargetPlayerCommand {
 
-	public CommandSnowball(@Nonnull final CrucialCraft cc) {
+	public CommandUnmute(@Nonnull final CrucialCraft cc) {
 		super(cc);
 	}
 
 	@Override
 	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		ProjectileUtils.launchProjectile(target, Snowball.class, 7.5);
-		target.sendMessage(Text.of(TextColors.GOLD, "You launched a snowball."));
-		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You made ", TextColors.RED, target.getName(), TextColors.GOLD, " launch a snowball.")));
+		CCPlayerData data = target.get(CCPlayerData.class).get();
+		data.setMuted(false);
+		target.offer(data);
+
+		target.sendMessage(Text.of(TextColors.GOLD, "You are no longer muted."));
 	}
 
 	@Override
 	public String getPermission() {
-		return "cc.snowball";
+		return "cc.unmute";
 	}
 
 	@Override

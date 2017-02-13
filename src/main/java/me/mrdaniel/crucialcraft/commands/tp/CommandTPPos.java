@@ -13,12 +13,12 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.data.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandTPPos extends PlayerCommand {
+public class CommandTPPos extends TargetPlayerCommand {
 
 	public CommandTPPos(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -50,5 +50,10 @@ public class CommandTPPos extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.tppos";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

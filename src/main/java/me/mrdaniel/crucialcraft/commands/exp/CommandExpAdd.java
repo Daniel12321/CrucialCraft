@@ -12,9 +12,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 
-public class CommandExpAdd extends PlayerCommand {
+public class CommandExpAdd extends TargetPlayerCommand {
 
 	public CommandExpAdd(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -31,5 +31,10 @@ public class CommandExpAdd extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.exp.add";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

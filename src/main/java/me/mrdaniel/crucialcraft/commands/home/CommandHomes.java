@@ -14,11 +14,11 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.data.Teleport;
 
-public class CommandHomes extends PlayerCommand {
+public class CommandHomes extends TargetPlayerCommand {
 
 	public CommandHomes(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -48,5 +48,10 @@ public class CommandHomes extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.home.list";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

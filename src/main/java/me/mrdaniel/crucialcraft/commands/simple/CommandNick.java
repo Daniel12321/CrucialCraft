@@ -11,12 +11,12 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
-public class CommandNick extends PlayerCommand{
+public class CommandNick extends TargetPlayerCommand{
 
 	public CommandNick(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -44,5 +44,10 @@ public class CommandNick extends PlayerCommand{
 	@Override
 	public String getPermission() {
 		return "cc.nick";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

@@ -11,12 +11,12 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.data.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandWarp extends PlayerCommand {
+public class CommandWarp extends TargetPlayerCommand {
 
 	public CommandWarp(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -47,5 +47,10 @@ public class CommandWarp extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.warp.tp";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

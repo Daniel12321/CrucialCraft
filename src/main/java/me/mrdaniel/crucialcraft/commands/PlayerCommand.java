@@ -1,7 +1,5 @@
 package me.mrdaniel.crucialcraft.commands;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.command.CommandSource;
@@ -19,15 +17,9 @@ public abstract class PlayerCommand extends PermissionCommand {
 
 	@Override
 	public void perform(@Nonnull final CommandSource src, @Nonnull final CommandContext args) {
-		if (args.<Player>getOne("other").isPresent()) {
-			Player target = args.<Player>getOne("other").get();
-
-			if (target.equals(src)) { this.execute(target, Optional.empty(), args); }
-			else { this.execute(target, Optional.of(src), args); }
-		}
-		else if (src instanceof Player) { this.execute((Player)src, Optional.empty(), args); }
+		if (src instanceof Player) { this.execute((Player)src, args); }
 		else { Messages.NOT_PLAYER.send(src); }
 	}
 
-	public abstract void execute(@Nonnull final Player target, @Nonnull final Optional<CommandSource> src, @Nonnull final CommandContext args);
+	public abstract void execute(@Nonnull final Player target, @Nonnull final CommandContext args);
 }

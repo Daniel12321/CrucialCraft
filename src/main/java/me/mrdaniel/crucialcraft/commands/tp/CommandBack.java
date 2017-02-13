@@ -11,12 +11,12 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.data.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandBack extends PlayerCommand {
+public class CommandBack extends TargetPlayerCommand {
 
 	public CommandBack(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -33,6 +33,7 @@ public class CommandBack extends PlayerCommand {
 
 			if (tp.teleport(super.getCrucialCraft(), target)) {
 				target.sendMessage(Text.of(TextColors.GOLD, "You were teleported back to your last location."));
+				src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You teleported ", TextColors.RED, target.getName(), TextColors.GOLD, " to his last location.")));
 			}
 			else { Messages.TELEPORT_DOESNT_EXIST.send(src.orElse(target)); }
 		}
@@ -42,5 +43,10 @@ public class CommandBack extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.back";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

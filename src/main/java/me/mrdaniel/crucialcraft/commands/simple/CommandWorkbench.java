@@ -11,10 +11,10 @@ import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryArchetypes;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.ServerUtils;
 
-public class CommandWorkbench extends PlayerCommand {
+public class CommandWorkbench extends TargetPlayerCommand {
 
 	public CommandWorkbench(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -28,5 +28,10 @@ public class CommandWorkbench extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.workbench";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

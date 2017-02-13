@@ -1,10 +1,7 @@
 package me.mrdaniel.crucialcraft.commands.home;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
@@ -23,7 +20,7 @@ public class CommandSetHome extends PlayerCommand {
 	}
 
 	@Override
-	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final CommandContext args) {
 		String name = args.<String>getOne("name").get();
 		CCPlayerData data = target.get(CCPlayerData.class).get();
 

@@ -24,6 +24,7 @@ public enum Messages {
 	NO_SUCH_GAMEMODE(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "No gamemode with this name exists.")),
 	NO_SUCH_TIME(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "No time with this name exists.")),
 	NO_SUCH_WEATHER(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "No weather with this name exists.")),
+	NO_SUCH_NICK(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "No player with this nickname exists.")),
 	IS_NOT_JAILED(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "This person is not jailed.")),
 	NO_TARGET_YOURSELF(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You cant target yourself.")),
 	NO_LAST_LOCATION(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "No last location was found.")),

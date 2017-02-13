@@ -14,12 +14,12 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.data.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandTop extends PlayerCommand {
+public class CommandTop extends TargetPlayerCommand {
 
 	public CommandTop(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -49,5 +49,10 @@ public class CommandTop extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.top";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

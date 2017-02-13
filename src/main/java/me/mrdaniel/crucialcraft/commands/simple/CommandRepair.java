@@ -15,10 +15,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandRepair extends PlayerCommand {
+public class CommandRepair extends TargetPlayerCommand {
 
 	public CommandRepair(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -43,5 +43,10 @@ public class CommandRepair extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.repair";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

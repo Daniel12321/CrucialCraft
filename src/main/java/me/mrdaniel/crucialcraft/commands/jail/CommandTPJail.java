@@ -11,11 +11,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.data.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandTPJail extends PlayerCommand {
+public class CommandTPJail extends TargetPlayerCommand {
 
 	public CommandTPJail(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -38,5 +38,10 @@ public class CommandTPJail extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.jail.tp";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

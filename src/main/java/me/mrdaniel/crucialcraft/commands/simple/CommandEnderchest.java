@@ -17,7 +17,7 @@ public class CommandEnderchest extends PlayerTargetPlayerCommand {
 
 	@Override
 	public void execute(final Player target, final Player src, final CommandContext args) {
-		src.openInventory(target.getEnderChestInventory(), ServerUtils.getGenericCause(super.getCrucialCraft().getContainer()));
+		src.openInventory(target.getEnderChestInventory(), ServerUtils.getCause(super.getCrucialCraft().getContainer()));
 	}
 
 	@Override

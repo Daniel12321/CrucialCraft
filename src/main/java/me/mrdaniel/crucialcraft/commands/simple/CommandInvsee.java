@@ -17,7 +17,7 @@ public class CommandInvsee extends PlayerTargetPlayerCommand {
 
 	@Override
 	public void execute(final Player target, final Player src, final CommandContext args) {
-		src.openInventory(target.getInventory(), ServerUtils.getGenericCause(super.getCrucialCraft().getContainer()));
+		src.openInventory(target.getInventory(), ServerUtils.getCause(super.getCrucialCraft().getContainer()));
 	}
 
 	@Override

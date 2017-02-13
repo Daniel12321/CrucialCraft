@@ -12,9 +12,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 
-public class CommandVanish extends PlayerCommand {
+public class CommandVanish extends TargetPlayerCommand {
 
 	public CommandVanish(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -39,5 +39,10 @@ public class CommandVanish extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.vanish";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

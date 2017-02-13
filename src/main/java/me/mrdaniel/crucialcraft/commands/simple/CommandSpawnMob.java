@@ -18,10 +18,10 @@ import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 import com.google.common.collect.Lists;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandSpawnMob extends PlayerCommand {
+public class CommandSpawnMob extends TargetPlayerCommand {
 
 	public CommandSpawnMob(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -42,5 +42,10 @@ public class CommandSpawnMob extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.spawnmob";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

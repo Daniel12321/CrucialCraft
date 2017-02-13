@@ -1,10 +1,7 @@
 package me.mrdaniel.crucialcraft.commands.simple;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
@@ -21,7 +18,7 @@ public class CommandSetSpawn extends PlayerCommand {
 	}
 
 	@Override
-	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final CommandContext args) {
 		super.getCrucialCraft().getDataFile().setSpawn(new Teleport(target.getLocation(), target.getHeadRotation()));
 		target.sendMessage(Text.of(TextColors.GOLD, "You set the spawn point to your location."));
 	}
@@ -30,4 +27,5 @@ public class CommandSetSpawn extends PlayerCommand {
 	public String getPermission() {
 		return "cc.setspawn";
 	}
+
 }

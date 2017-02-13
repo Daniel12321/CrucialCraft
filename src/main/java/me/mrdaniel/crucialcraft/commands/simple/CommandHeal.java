@@ -12,9 +12,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 
-public class CommandHeal extends PlayerCommand {
+public class CommandHeal extends TargetPlayerCommand {
 
 	public CommandHeal(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -30,5 +30,10 @@ public class CommandHeal extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.heal";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

@@ -14,10 +14,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandGamemode extends PlayerCommand {
+public class CommandGamemode extends TargetPlayerCommand {
 
 	public CommandGamemode(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -43,5 +43,10 @@ public class CommandGamemode extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.gamemode";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

@@ -10,21 +10,15 @@ import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.InvalidDataException;
 
-import me.mrdaniel.crucialcraft.CrucialCraft;
-
 public class CCPlayerDataBuilder extends AbstractDataBuilder<CCPlayerData> implements DataManipulatorBuilder<CCPlayerData, ImmutableCCPlayerData> {
 
-	private final CrucialCraft cc;
-
-    public CCPlayerDataBuilder(@Nonnull final CrucialCraft cc) {
+    public CCPlayerDataBuilder() {
     	super(CCPlayerData.class, 1);
-
-    	this.cc = cc;
     }
 
     @Override
     public CCPlayerData create() {
-        return new CCPlayerData(this.cc);
+        return new CCPlayerData();
     }
 
     @Override

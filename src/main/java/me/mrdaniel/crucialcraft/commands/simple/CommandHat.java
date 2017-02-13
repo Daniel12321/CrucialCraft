@@ -11,10 +11,10 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandHat extends PlayerCommand {
+public class CommandHat extends TargetPlayerCommand {
 
 	public CommandHat(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -32,5 +32,10 @@ public class CommandHat extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.hat";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

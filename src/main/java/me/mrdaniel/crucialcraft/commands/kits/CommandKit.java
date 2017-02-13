@@ -9,9 +9,9 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 
-public class CommandKit extends PlayerCommand {
+public class CommandKit extends TargetPlayerCommand {
 
 	public CommandKit(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -28,5 +28,10 @@ public class CommandKit extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.kit.get";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

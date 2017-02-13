@@ -12,9 +12,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 
-public class CommandFeed extends PlayerCommand {
+public class CommandFeed extends TargetPlayerCommand {
 
 	public CommandFeed(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -30,5 +30,10 @@ public class CommandFeed extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.feed";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

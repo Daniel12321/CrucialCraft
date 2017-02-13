@@ -13,10 +13,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandMore extends PlayerCommand {
+public class CommandMore extends TargetPlayerCommand {
 
 	public CommandMore(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -31,10 +31,16 @@ public class CommandMore extends PlayerCommand {
 		item.setQuantity(item.getMaxStackQuantity());
 		target.setItemInHand(HandTypes.MAIN_HAND, item);
 		target.sendMessage(Text.of(TextColors.GOLD, "Your stack was filled."));
+		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You filled ", TextColors.RED, target.getName(), TextColors.GOLD, "'s stack.")));
 	}
 
 	@Override
 	public String getPermission() {
 		return "cc.more";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

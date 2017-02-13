@@ -12,10 +12,10 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 import me.mrdaniel.crucialcraft.utils.ServerUtils;
 
-public class CommandSpeed extends PlayerCommand {
+public class CommandSpeed extends TargetPlayerCommand {
 
 	public CommandSpeed(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -39,5 +39,10 @@ public class CommandSpeed extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.speed";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }

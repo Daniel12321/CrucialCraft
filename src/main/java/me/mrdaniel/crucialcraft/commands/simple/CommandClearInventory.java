@@ -11,9 +11,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
 
-public class CommandClearInventory extends PlayerCommand {
+public class CommandClearInventory extends TargetPlayerCommand {
 
 	public CommandClearInventory(@Nonnull final CrucialCraft cc) {
 		super(cc);
@@ -29,5 +29,10 @@ public class CommandClearInventory extends PlayerCommand {
 	@Override
 	public String getPermission() {
 		return "cc.clearinventory";
+	}
+
+	@Override
+	public boolean canTargetSelf() {
+		return true;
 	}
 }
