@@ -19,8 +19,6 @@ public abstract class TargetPlayerCommand extends PermissionCommand {
 
 	@Override
 	public void perform(final CommandSource src, final CommandContext args) {
-		// Player target; // = args.<Player>getOne("target").get();
-
 		if (args.<Player>getOne("target").isPresent()) {
 			Player target = args.<Player>getOne("target").get();
 			if (target.equals(src)) {

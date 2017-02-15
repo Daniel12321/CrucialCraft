@@ -11,31 +11,42 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
+import me.mrdaniel.crucialcraft.commands.PermissionCommand;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
-public class CommandPlaytime extends TargetPlayerCommand {
+public class CommandPlaytime extends PermissionCommand {
 
 	public CommandPlaytime(@Nonnull final CrucialCraft cc) {
 		super(cc);
 	}
 
 	@Override
-	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-
-		if (src.isPresent()) { src.get().sendMessage(Text.of(TextColors.RED, target.getName(), TextColors.GOLD, "'s total playtime: ", TextColors.RED, TextUtils.getTimeFormat(data.getCurrentPlaytime()), TextColors.GOLD, ".")); }
-		else { target.sendMessage(Text.of(TextColors.GOLD, "Your total playtime: ", TextColors.RED, TextUtils.getTimeFormat(data.getCurrentPlaytime()), TextColors.GOLD, ".")); }
+	public void perform(final CommandSource src, final CommandContext args) {
+		if (args.<String>getOne("target").isPresent()) {
+			String name = args.<String>getOne("target").get();
+			Optional<Player> p = super.getCrucialCraft().getGame().getServer().getPlayer(name);
+	
+			if (p.isPresent()) {
+				PlayerFile file = super.getCrucialCraft().getPlayerData().get(p.get().getUniqueId());
+				src.sendMessage(Text.of(TextColors.RED, p.get().getName(), TextColors.GOLD, "'s total playtime is ", TextColors.RED, TextUtils.getTimeFormat(file.getCurrentPlaytime()), TextColors.GOLD, "."));
+			}
+			else {
+				Optional<PlayerFile> data = super.getCrucialCraft().getPlayerData().getOffline(name);
+				if (data.isPresent()) { src.sendMessage(Text.of(TextColors.RED, name, TextColors.GOLD, "'s total playtime is ", TextColors.RED, TextUtils.getTimeFormat(data.get().getCurrentPlaytime()), TextColors.GOLD, ".")); }
+				else { Messages.NO_SUCH_USER.send(src); }
+			}
+		}
+		else if (src instanceof Player) {
+			PlayerFile file = super.getCrucialCraft().getPlayerData().get(((Player)src).getUniqueId());
+			src.sendMessage(Text.of(TextColors.GOLD, "Your total playtime is ", TextColors.RED, TextUtils.getTimeFormat(file.getCurrentPlaytime()), TextColors.GOLD, "."));
+		}
+		else { Messages.NOT_PLAYER.send(src); }
 	}
 
 	@Override
 	public String getPermission() {
 		return "cc.playtime";
-	}
-
-	@Override
-	public boolean canTargetSelf() {
-		return true;
 	}
 }

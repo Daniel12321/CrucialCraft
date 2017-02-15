@@ -9,8 +9,8 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PlayerTargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 
 public class CommandTPHere extends PlayerTargetPlayerCommand {
 
@@ -20,9 +20,8 @@ public class CommandTPHere extends PlayerTargetPlayerCommand {
 
 	@Override
 	public void execute(final Player target, final Player src, final CommandContext args) {
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		data.setLastLocation(new Teleport(target.getLocation(), target.getHeadRotation()));
-		target.offer(data);
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		file.setLastLocation(new Teleport(target.getLocation(), target.getHeadRotation()));
 
 		target.setLocationAndRotation(src.getLocation(), src.getHeadRotation());
 		target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to ", TextColors.RED, src.getName(), TextColors.GOLD, "'s location."));

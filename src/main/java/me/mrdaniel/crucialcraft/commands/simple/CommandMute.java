@@ -12,7 +12,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
 
 public class CommandMute extends TargetPlayerCommand {
 
@@ -22,9 +22,8 @@ public class CommandMute extends TargetPlayerCommand {
 
 	@Override
 	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		data.setMuted(true);
-		target.offer(data);
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		file.setMuted(true);
 
 		target.sendMessage(Text.of(TextColors.GOLD, "You are now muted."));
 	}

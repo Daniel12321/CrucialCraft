@@ -11,7 +11,6 @@ import org.spongepowered.api.service.permission.Subject;
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
@@ -23,11 +22,14 @@ public class ChatListener extends CCObject {
 
 	@Listener(order = Order.LATE)
 	public void onChat(final MessageChannelEvent.Chat e, @Root final Player p) {
-		if (e.getRawMessage().toPlain().contains("&") && !p.hasPermission("cc.colors.chat")) { Messages.NO_COLOR_PERMISSION.send(p); return; }
+		if (super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).isMuted()) { Messages.MUTED.send(p); e.setCancelled(true); return; }
+
+		if (e.getRawMessage().toPlain().contains("&") && !p.hasPermission("cc.colors.chat")) { Messages.NO_COLOR_PERMISSION.send(p); e.setCancelled(true); return; }
 
 		Subject subject = p.getContainingCollection().get(p.getIdentifier());
 
-		String msg = super.getCrucialCraft().getConfig().getChatMessage(p.get(CCPlayerData.class).get().getNick().orElse(p.getName()), subject, e.getRawMessage().toPlain());
+		String name = super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).getNick().orElse(p.getName());
+		String msg = super.getCrucialCraft().getConfig().getChatMessage(name, subject, e.getRawMessage().toPlain());
 
 		e.setMessage(TextUtils.toText(msg));
 	}

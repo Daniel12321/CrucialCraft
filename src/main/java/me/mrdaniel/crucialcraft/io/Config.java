@@ -54,8 +54,9 @@ public class Config extends CCObject {
 	private CommentedConfigurationNode getEmptyNode() {
 		CommentedConfigurationNode node = this.loader.createEmptyNode(ConfigurationOptions.defaults());
 
-//		node.getNode("teleport", "delay", "enabled").setValue(true);
-//		node.getNode("teleport", "delay", "seconds").setValue(3);
+		node.getNode("teleport", "delay", "enabled").setValue(true);
+		node.getNode("teleport", "delay", "seconds").setValue(3);
+		node.getNode("teleport", "expiry", "seconds").setValue(60);
 
 		node.getNode("messages").setComment("Some messages allow the use of variables. If a message does, it will be shown above the setting.\nThe plugin will replace these variables with the correct number or text.");
 		node.getNode("messages", "login").setComment("Allowed Variables: %player");
@@ -102,6 +103,7 @@ public class Config extends CCObject {
 
 	public boolean isTeleportDelay() { return this.config.getNode("teleport", "delay", "enabled").getBoolean(); }
 	public int getTeleportDelay() { return this.config.getNode("teleport", "delay", "seconds").getInt(); }
+	public int getTeleportExpiry() { return this.config.getNode("teleport", "expiry", "seconds").getInt(); }
 
 	@Nonnull public Text getBroadcastMessage(@Nonnull final String message) { return TextUtils.toText(this.config.getNode("messages", "broadcast").getString().replace("%message", message) + " "); }
 	@Nonnull public Text getLoginMessage(@Nonnull final String playername) { return TextUtils.toText(this.config.getNode("messages", "login").getString().replace("%player", playername)); }

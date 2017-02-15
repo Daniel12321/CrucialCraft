@@ -21,11 +21,12 @@ public class TextUtils {
 
 	@Nonnull
 	public static String getTimeRemainingFormat(@Nonnull final Instant expiration) {
-		return getTimeFormat((int)((expiration.toEpochMilli() - System.currentTimeMillis()) / 1000));
+		return getTimeFormat(expiration.toEpochMilli() - System.currentTimeMillis());
 	}
 
 	@Nonnull
-	public static String getTimeFormat(int seconds) {
+	public static String getTimeFormat(final long millis) {
+		int seconds = (int) ((millis) / 1000);
 		int minutes = 0;
 		int hours = 0;
 		int days = 0;
@@ -34,10 +35,10 @@ public class TextUtils {
 		while (seconds >= 60) { minutes++; seconds -= 60; }
 
 		String str = "";
-		if (days > 0) { str += days + " Days"; }
-		if (hours > 0) { str += (str.equals("") ? "" : " ") + hours + " Hours"; }
-		if (minutes > 0) { str += (str.equals("") ? "" : " ") + minutes + " Minutes"; }
-		if (seconds > 0) { str += (str.equals("") ? "" : " ") + seconds + " Seconds"; }
+		if (days > 0) { str += days + "d"; }
+		if (hours > 0) { str += (str.equals("") ? "" : " ") + hours + "h"; }
+		if (minutes > 0) { str += (str.equals("") ? "" : " ") + minutes + "m"; }
+		if (seconds > 0) { str += (str.equals("") ? "" : " ") + seconds + "s"; }
 		return str;
 	}
 }

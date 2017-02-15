@@ -11,8 +11,8 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandDelHome extends PlayerCommand {
@@ -25,12 +25,11 @@ public class CommandDelHome extends PlayerCommand {
 	public void execute(final Player target, final CommandContext args) {
 		String name = args.<String>getOne("name").get();
 
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		Optional<Teleport> home = data.getHome(name);
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		Optional<Teleport> home = file.getHome(name);
 		if (!home.isPresent()) { Messages.NO_SUCH_HOME.send(target); return; }
 
-		data.setHome(name, null);
-		target.offer(data);
+		file.setHome(name, null);
 		target.sendMessage(Text.of(TextColors.GOLD, "You deleted home ", TextColors.RED, name, TextColors.GOLD, "."));
 	}
 

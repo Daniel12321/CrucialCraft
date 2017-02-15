@@ -14,8 +14,8 @@ import org.spongepowered.api.util.ban.Ban;
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.ServerUtils;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
@@ -61,19 +61,16 @@ public class ClientListener extends CCObject {
 
 	@Listener(order = Order.LATE)
 	public void onJoin(final ClientConnectionEvent.Join e) {
-		if (!e.getTargetEntity().get(CCPlayerData.class).isPresent()) { this.onFirstJoin(e.getTargetEntity()); }
+		boolean firstjoin = super.getCrucialCraft().getPlayerData().load(e.getTargetEntity().getUniqueId());
+		if (firstjoin) { this.onFirstJoin(e.getTargetEntity()); }
 
 		e.setMessage(super.getCrucialCraft().getConfig().getLoginMessage(e.getTargetEntity().getName()));
 		e.getTargetEntity().sendMessages(super.getCrucialCraft().getConfig().getMotd(e.getTargetEntity().getName(), super.getCrucialCraft().getGame().getServer().getOnlinePlayers().size(), super.getCrucialCraft().getGame().getServer().getMaxPlayers()));
 
-		CCPlayerData data = e.getTargetEntity().get(CCPlayerData.class).get();
-		data.setLastLogin(System.currentTimeMillis());
-		e.getTargetEntity().offer(data);
+		super.getCrucialCraft().getPlayerData().get(e.getTargetEntity().getUniqueId()).setLastLogin(System.currentTimeMillis());
 	}
 
 	private void onFirstJoin(@Nonnull final Player p) {
-		p.offer(new CCPlayerData());
-
 		ServerUtils.broadcast(super.getCrucialCraft().getGame().getServer(), super.getCrucialCraft().getConfig().getFirstJoinMessage(p.getName()));
 
 		Optional<Teleport> newbiespawn = super.getCrucialCraft().getDataFile().getNewbieSpawn();
@@ -86,9 +83,8 @@ public class ClientListener extends CCObject {
 	public void onQuit(final ClientConnectionEvent.Disconnect e) {
 		e.setMessage(super.getCrucialCraft().getConfig().getLogoutMessage(e.getTargetEntity().getName()));
 
-		CCPlayerData data = e.getTargetEntity().get(CCPlayerData.class).get();
-		data.setLastLogout(System.currentTimeMillis());
-		data.setPlaytime(data.getCurrentPlaytime());
-		e.getTargetEntity().offer(data);
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(e.getTargetEntity().getUniqueId());
+		file.setPlaytime(file.getCurrentPlaytime());
+		file.setLastLogout(System.currentTimeMillis());
 	}
 }

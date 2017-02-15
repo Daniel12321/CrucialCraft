@@ -12,7 +12,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
 import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
@@ -36,9 +36,8 @@ public class CommandNick extends TargetPlayerCommand{
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You reset ", TextColors.RED, target.getName(), TextColors.GOLD, "'s nickname.")));
 		}
 
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		data.setNick(nick.orElse(null));
-		target.offer(data);
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		file.setNick(nick.orElse(null));
 	}
 
 	@Override

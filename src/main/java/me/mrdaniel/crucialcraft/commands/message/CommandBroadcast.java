@@ -1,4 +1,4 @@
-package me.mrdaniel.crucialcraft.commands.simple;
+package me.mrdaniel.crucialcraft.commands.message;
 
 import javax.annotation.Nonnull;
 

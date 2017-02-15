@@ -12,8 +12,8 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandJail extends TargetPlayerCommand {
@@ -30,9 +30,8 @@ public class CommandJail extends TargetPlayerCommand {
 		Teleport teleport = jail.get();
 
 		if (teleport.teleport(super.getCrucialCraft(), target)) {
-			CCPlayerData data = target.get(CCPlayerData.class).get();
-			data.setJailed(true);
-			target.offer(data);
+			PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+			file.setJailed(true);
 
 			target.sendMessage(Text.of(TextColors.GOLD, "You were jailed."));
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You jailed ", TextColors.RED, target.getName(), TextColors.GOLD, " in jail ", TextColors.RED, name, TextColors.GOLD, ".")));

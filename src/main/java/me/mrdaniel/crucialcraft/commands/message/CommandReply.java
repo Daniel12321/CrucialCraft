@@ -9,7 +9,7 @@ import org.spongepowered.api.entity.living.player.Player;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandReply extends PlayerCommand {
@@ -20,9 +20,9 @@ public class CommandReply extends PlayerCommand {
 
 	@Override
 	public void execute(final Player target, final CommandContext args) {
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		if (data.getLastMessager().isPresent()) {
-			String last_messager = data.getLastMessager().get();
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		if (file.getLastMessager().isPresent()) {
+			String last_messager = file.getLastMessager().get();
 			Optional<Player> p = super.getCrucialCraft().getGame().getServer().getPlayer(last_messager);
 			if (!p.isPresent()) { Messages.NO_LAST_MESSAGER.send(target); return; }
 

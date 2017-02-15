@@ -12,7 +12,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandTPJail extends TargetPlayerCommand {

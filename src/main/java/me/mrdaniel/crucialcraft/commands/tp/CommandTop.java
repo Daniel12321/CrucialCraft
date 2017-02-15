@@ -15,8 +15,8 @@ import org.spongepowered.api.world.World;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandTop extends TargetPlayerCommand {
@@ -33,9 +33,8 @@ public class CommandTop extends TargetPlayerCommand {
 		int z = loc.getBlockZ();
 		for (int y = 255; y > 0; y--) {
 			if (world.getBlock(x, y, z).getType() != BlockTypes.AIR) {
-				CCPlayerData data = target.get(CCPlayerData.class).get();
-				data.setLastLocation(new Teleport(target.getLocation(), target.getHeadRotation()));
-				target.offer(data);
+				PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+				file.setLastLocation(new Teleport(target.getLocation(), target.getHeadRotation()));
 
 				target.setLocation(world.getLocation(x + 0.5, y + 1.0, z + 0.5));
 				target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to the highest block."));

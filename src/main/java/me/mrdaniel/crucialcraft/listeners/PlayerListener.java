@@ -10,8 +10,7 @@ import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEv
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 
 public class PlayerListener extends CCObject {
 
@@ -24,9 +23,7 @@ public class PlayerListener extends CCObject {
 		if (e.getTargetEntity() instanceof Player) {
 			Player p = (Player) e.getTargetEntity();
 
-			CCPlayerData data = p.get(CCPlayerData.class).get();
-			data.setLastLocation(new Teleport(p.getLocation(), p.getHeadRotation()));
-			p.offer(data);
+			super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).setLastLocation(new Teleport(p.getLocation(), p.getHeadRotation()));
 		}
 	}
 

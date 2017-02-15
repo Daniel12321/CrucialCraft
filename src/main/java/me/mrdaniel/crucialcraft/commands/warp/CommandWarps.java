@@ -31,7 +31,7 @@ public class CommandWarps extends PermissionCommand {
 		for (int i = 1; i < warps.size(); i++) {
 			txt.append(Text.of(TextColors.GOLD, ", "), this.getWarpText(warps.get(i)));
 		}
-		src.sendMessages(Text.of(TextColors.GOLD, "Warps: "), txt.build());
+		src.sendMessages(Text.of(TextColors.GOLD, "Warps:"), txt.build());
 	}
 
 	@Nonnull

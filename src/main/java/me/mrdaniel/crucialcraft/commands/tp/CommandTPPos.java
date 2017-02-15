@@ -14,8 +14,8 @@ import org.spongepowered.api.world.World;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandTPPos extends TargetPlayerCommand {
@@ -38,9 +38,8 @@ public class CommandTPPos extends TargetPlayerCommand {
 		double y = args.<Double>getOne("y").get();
 		double z = args.<Double>getOne("z").get();
 
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		data.setLastLocation(new Teleport(target.getLocation(), target.getHeadRotation()));
-		target.offer(data);
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		file.setLastLocation(new Teleport(target.getLocation(), target.getHeadRotation()));
 
 		target.setLocation(new Location<World>(world, x, y, z));
 		target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to ", TextColors.RED, world.getName(), " ", x, " ", y, " ", z, TextColors.GOLD, "."));

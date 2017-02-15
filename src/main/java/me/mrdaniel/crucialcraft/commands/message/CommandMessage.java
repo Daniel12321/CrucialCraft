@@ -12,7 +12,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
+import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
 public class CommandMessage extends TargetPlayerCommand {
@@ -23,8 +23,10 @@ public class CommandMessage extends TargetPlayerCommand {
 
 	@Override
 	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		Text targetname = TextUtils.toText(target.get(CCPlayerData.class).get().getNick().orElse(target.getName()));
-		Text srcname = (src.get() instanceof Player) ? TextUtils.toText(((Player)src.get()).get(CCPlayerData.class).get().getNick().orElse(((Player)src.get()).getName())) : Text.of("Console");
+		if (src.isPresent() && src.get() instanceof Player && super.getCrucialCraft().getPlayerData().get(((Player)src.get()).getUniqueId()).isMuted()) { Messages.MUTED.send(src); return; }
+
+		Text targetname = TextUtils.toText(super.getCrucialCraft().getPlayerData().get(target.getUniqueId()).getNick().orElse(target.getName()));
+		Text srcname = (src.get() instanceof Player) ? TextUtils.toText(super.getCrucialCraft().getPlayerData().get(((Player)src.get()).getUniqueId()).getNick().orElse(((Player)src.get()).getName())) : Text.of("Console");
 
 		String msg = args.<String>getOne("message").get();
 		Text txt = src.get().hasPermission("cc.colors.message") ? TextUtils.toText(msg) : Text.of(msg);

@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PermissionCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
 public class CommandList extends PermissionCommand {
@@ -32,9 +31,9 @@ public class CommandList extends PermissionCommand {
 
 		src.sendMessage(Text.of(TextColors.GOLD, "There are ", TextColors.RED, players.size(), " / ", super.getCrucialCraft().getGame().getServer().getMaxPlayers(), TextColors.GOLD, " players online:"));
 
-		Text.Builder txt = Text.builder().append(Text.of(TextColors.RED, TextUtils.toText(players.get(0).get(CCPlayerData.class).get().getNick().orElse(players.get(0).getName()))));
+		Text.Builder txt = Text.builder().append(Text.of(TextColors.RED, TextUtils.toText(super.getCrucialCraft().getPlayerData().get(players.get(0).getUniqueId()).getNick().orElse(players.get(0).getName()))));
 		for (int i = 1; i < players.size(); i++) {
-			txt.append(Text.of(TextColors.GOLD, ", ", TextColors.RED, TextUtils.toText(players.get(i).get(CCPlayerData.class).get().getNick().orElse(players.get(i).getName()))));
+			txt.append(Text.of(TextColors.GOLD, ", ", TextColors.RED, TextUtils.toText(super.getCrucialCraft().getPlayerData().get(players.get(i).getUniqueId()).getNick().orElse(players.get(i).getName()))));
 		}
 		src.sendMessage(txt.build());
 	}

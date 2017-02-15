@@ -1,4 +1,4 @@
-package me.mrdaniel.crucialcraft.commands.simple;
+package me.mrdaniel.crucialcraft.commands.message;
 
 import javax.annotation.Nonnull;
 
@@ -10,7 +10,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PermissionCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
+import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.ServerUtils;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
@@ -22,9 +22,11 @@ public class CommandMe extends PermissionCommand {
 
 	@Override
 	public void perform(final CommandSource src, final CommandContext args) {
+		if (src instanceof Player && super.getCrucialCraft().getPlayerData().get(((Player)src).getUniqueId()).isMuted()) { Messages.MUTED.send(src); return; }
+
 		String message = args.<String>getOne("message").get();
 
-		Text name = (src instanceof Player) ? TextUtils.toText(((Player)src).get(CCPlayerData.class).get().getNick().orElse(((Player)src).getName())) : Text.of("Console") ;
+		Text name = (src instanceof Player) ? TextUtils.toText(super.getCrucialCraft().getPlayerData().get(((Player)src).getUniqueId()).getNick().orElse(((Player)src).getName())) : Text.of("Console") ;
 		ServerUtils.broadcast(super.getCrucialCraft().getGame().getServer(), Text.of(TextColors.DARK_PURPLE, "* ", name, " ", TextColors.DARK_PURPLE, message));
 	}
 

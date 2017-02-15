@@ -12,8 +12,8 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
-import me.mrdaniel.crucialcraft.data.Teleport;
+import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandUnjail extends TargetPlayerCommand {
@@ -24,11 +24,10 @@ public class CommandUnjail extends TargetPlayerCommand {
 
 	@Override
 	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		CCPlayerData data = target.get(CCPlayerData.class).get();
-		if (!data.getJailed()) { Messages.IS_NOT_JAILED.send(src.orElse(target)); return; }
+		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
+		if (!file.isJailed()) { Messages.IS_NOT_JAILED.send(src.orElse(target)); return; }
 
-		data.setJailed(false);
-		target.offer(data);
+		file.setJailed(false);
 
 		Optional<Teleport> spawn = super.getCrucialCraft().getDataFile().getSpawn();
 		if (!(spawn.isPresent() && spawn.get().teleport(super.getCrucialCraft(), target))) { target.setLocation(target.getWorld().getSpawnLocation()); }

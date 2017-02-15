@@ -13,7 +13,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PermissionCommand;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
@@ -30,17 +29,17 @@ public class CommandRealname extends PermissionCommand {
 		Player player = this.getNickPlayer(name);
 		if (player == null) { Messages.NO_SUCH_NICK.send(src); return; }
 
-		src.sendMessage(Text.of(TextUtils.toText(player.get(CCPlayerData.class).get().getNick().get()), TextColors.GOLD, "'s real name is ", TextColors.RED, player.getName(), TextColors.GOLD, "."));
+		src.sendMessage(Text.of(TextUtils.toText(super.getCrucialCraft().getPlayerData().get(player.getUniqueId()).getNick().get()), TextColors.GOLD, "'s real name is ", TextColors.RED, player.getName(), TextColors.GOLD, "."));
 	}
 
 	private Player getNickPlayer(@Nonnull final String nick) {
 		Collection<Player> players = super.getCrucialCraft().getGame().getServer().getOnlinePlayers();
 		for (Player p : players) {
-			Optional<String> n = p.get(CCPlayerData.class).get().getNick();
+			Optional<String> n = super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).getNick();
 			if (n.isPresent() && n.get().equalsIgnoreCase(nick)) { return p; }
 		}
 		for (Player p : players) {
-			Optional<String> n = p.get(CCPlayerData.class).get().getNick();
+			Optional<String> n = super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).getNick();
 			if (n.isPresent() && n.get().contains(nick)) { return p; }
 		}
 		return null;

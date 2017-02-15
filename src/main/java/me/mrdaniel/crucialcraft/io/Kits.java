@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
@@ -18,6 +19,7 @@ import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 public class Kits extends CCObject {
 
@@ -48,25 +50,40 @@ public class Kits extends CCObject {
 	}
 
 	@Nonnull
+	public List<String> getKits() { return this.config.getNode("kits").getChildrenMap().keySet().stream().map(obj -> (String)obj).collect(Collectors.toList()); }
+
+	@SuppressWarnings("serial")
+	@Nonnull
 	public List<ItemStack> getKit(@Nonnull final String name) {
 		List<ItemStack> l = Lists.newArrayList();
 
-		this.config.getNode("kits", name, "items").getChildrenMap().forEach((id, data) -> super.getCrucialCraft().getGame().getRegistry().getType(ItemType.class, (String)id).ifPresent(type -> l.add(ItemStack.builder().itemType(type).quantity(data.getNode("amount").getInt()).build())));
+		try { this.config.getNode("kits", name, "items").getValue(new TypeToken<List<ItemStack>>(){}).forEach(l::add); }
+		catch (final ObjectMappingException exc) { super.getCrucialCraft().getLogger().error("Failed to get items: {}", exc); }
 
 		return l;
+	}
+
+	public int getKitDelay(@Nonnull final String name) { return this.config.getNode("kits", name, "time").getInt(); }
+	public boolean isKitPlaytime(@Nonnull final String name) { return this.config.getNode("kits", name, "playtime").getBoolean(); }
+
+	@SuppressWarnings("serial")
+	public void setKit(@Nonnull final String name, @Nonnull final List<ItemStack> items, final int time, final boolean playtime) {
+		this.config.getNode("kits", name, "time").setValue(time);
+		this.config.getNode("kits", name, "playtime").setValue(playtime);
+		try { this.config.getNode("kits", name, "items").setValue(new TypeToken<List<ItemStack>>(){}, items); }
+		catch (final ObjectMappingException exc) { super.getCrucialCraft().getLogger().error("Failed to save items: {}", exc); }
+		this.save();
+	}
+
+	public void deleteKit(@Nonnull final String name) {
+		this.config.getNode("kits").removeChild(name); this.save();
 	}
 
 	@Nonnull
 	private CommentedConfigurationNode getEmptyNode() {
 		CommentedConfigurationNode node = this.loader.createEmptyNode(ConfigurationOptions.defaults());
 
-		node.getNode("kits").setComment("Kits can be edited or created here.\nThe time setting set the kit reload time in seconds.");
-		node.getNode("kits", "default", "time").setValue(86400);
-		node.getNode("kits", "default", "items", "minecraft:diamond_sword", "amount").setValue(1);
-		node.getNode("kits", "default", "items", "minecraft:diamond_sword", "name").setValue("&c&lPenetrator");
-		node.getNode("kits", "default", "items", "minecraft:diamond_sword", "lore").setValue(Lists.newArrayList("&2A very sharp sword.", "&2Will defeat anyone."));
-		node.getNode("kits", "default", "items", "minecraft:diamond_sword", "enchantments", "minecraft:sharpness").setValue(1);
-		node.getNode("kits", "default", "items", "minecraft:emerald", "amount").setValue(6);
+		node.getNode("kits").setComment("Kits can be edited, created or deleted here.\nThe time setting set the kit reload time in seconds.\nIf playtime is set to true, the kit delay will work based on ingame-time, else it will work based on system-time");
 
 		return node;
 	}

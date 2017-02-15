@@ -1,8 +1,9 @@
-package me.mrdaniel.crucialcraft.data;
+package me.mrdaniel.crucialcraft.teleport;
 
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.spongepowered.api.Server;
 import org.spongepowered.api.entity.Transform;
@@ -46,11 +47,26 @@ public class Teleport {
 		Optional<World> w = cc.getGame().getServer().getWorld(this.world);
 		if (!w.isPresent()) { return false; }
 
-		CCPlayerData data = p.get(CCPlayerData.class).get();
-		data.setLastLocation(new Teleport(p.getLocation(), p.getHeadRotation()));
-		p.offer(data);
+		Teleport t = new Teleport(p.getLocation(), p.getHeadRotation());
 
-		p.setLocationAndRotation(w.get().getLocation(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0));
-		return true;
+		if (p.setLocationAndRotation(w.get().getLocation(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0))) {
+			cc.getPlayerData().get(p.getUniqueId()).setLastLocation(t);
+			return true;
+		}
+		return false;
+	}
+
+	@Nonnull
+	public String serialize() {
+		return this.world + ":" + this.x + ":" + this.y + ":" + this.z + ":" + this.pitch + ":" + this.yaw;
+	}
+
+	@Nonnull
+	public static Optional<Teleport> deserialize(@Nullable final String str) {
+		try {
+			String[] s = str.split(":");
+			return Optional.of(new Teleport(s[0], Double.valueOf(s[1]), Double.valueOf(s[2]), Double.valueOf(s[3]), Double.valueOf(s[4]), Double.valueOf(s[5])));
+		}
+		catch (final Exception exc) { return Optional.empty(); }
 	}
 }

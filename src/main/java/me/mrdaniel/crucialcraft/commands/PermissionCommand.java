@@ -21,7 +21,7 @@ public abstract class PermissionCommand extends CCObject implements CommandExecu
 
 	@Override
 	public CommandResult execute(final CommandSource src, final CommandContext args) throws CommandException {
-		if (!src.hasPermission(this.getPerm(args.<Player>getOne("other").isPresent()))) { Messages.NO_PERMISSION.send(src); }
+		if (!src.hasPermission(this.getPerm(args.<Player>getOne("target").isPresent()))) { Messages.NO_PERMISSION.send(src); }
 		else { this.perform(src, args); }
 		return CommandResult.success();
 	}

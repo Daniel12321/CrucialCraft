@@ -14,7 +14,6 @@ import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.data.CCPlayerData;
 import me.mrdaniel.crucialcraft.data.PowerToolData;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
@@ -26,12 +25,12 @@ public class WorldListener extends CCObject {
 
 	@Listener
 	public void onBlockChange(final ChangeBlockEvent.Pre e, @Root final Player p) {
-		p.get(CCPlayerData.class).ifPresent(data -> { if (data.getJailed()) { e.setCancelled(true); } });
+		if (super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).isJailed()) { e.setCancelled(true); }
 	}
 
 	@Listener
 	public void onInteract(final InteractEvent e, @Root final Player p) {
-		p.get(CCPlayerData.class).ifPresent(data -> { if (data.getJailed()) { e.setCancelled(true); } });
+		if (super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).isJailed()) { e.setCancelled(true); }
 	}
 
 	@Listener
