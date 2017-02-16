@@ -1,11 +1,8 @@
 package me.mrdaniel.crucialcraft.commands.tp;
 
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
@@ -14,19 +11,19 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
+import me.mrdaniel.crucialcraft.commands.PlayerCommand;
 import me.mrdaniel.crucialcraft.io.PlayerFile;
 import me.mrdaniel.crucialcraft.teleport.Teleport;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandTop extends TargetPlayerCommand {
+public class CommandTop extends PlayerCommand {
 
 	public CommandTop(@Nonnull final CrucialCraft cc) {
 		super(cc);
 	}
 
 	@Override
-	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final Player target, final CommandContext args) {
 		Location<World> loc = target.getLocation();
 		World world = loc.getExtent();
 		int x = loc.getBlockX();
@@ -38,20 +35,14 @@ public class CommandTop extends TargetPlayerCommand {
 
 				target.setLocation(world.getLocation(x + 0.5, y + 1.0, z + 0.5));
 				target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to the highest block."));
-				src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You teleported ", TextColors.RED, target.getName(), TextColors.GOLD, " to the highest block.")));
 				return;
 			}
 		}
-		Messages.NO_BLOCK_FOUND.send(src.orElse(target));
+		Messages.NO_BLOCK_FOUND.send(target);
 	}
 
 	@Override
 	public String getPermission() {
 		return "cc.top";
-	}
-
-	@Override
-	public boolean canTargetSelf() {
-		return true;
 	}
 }

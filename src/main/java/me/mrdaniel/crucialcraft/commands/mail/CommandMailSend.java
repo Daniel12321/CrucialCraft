@@ -1,4 +1,4 @@
-package me.mrdaniel.crucialcraft.commands.simple;
+package me.mrdaniel.crucialcraft.commands.mail;
 
 import java.util.Optional;
 
@@ -9,6 +9,7 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
@@ -16,31 +17,38 @@ import me.mrdaniel.crucialcraft.commands.TargetUserCommand;
 import me.mrdaniel.crucialcraft.io.PlayerFile;
 import me.mrdaniel.crucialcraft.utils.Messages;
 
-public class CommandMute extends TargetUserCommand {
+public class CommandMailSend extends TargetUserCommand {
 
-	public CommandMute(@Nonnull final CrucialCraft cc) {
+	public CommandMailSend(@Nonnull final CrucialCraft cc) {
 		super(cc);
 	}
 
 	@Override
-	public void execute(final User target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(User target, Optional<CommandSource> src, CommandContext args) {
 		Optional<Player> p = target.getPlayer();
+		String sender = src.get() instanceof Player ? ((Player)src.get()).getName() : "Console";
+		String message = args.<String>getOne("message").get();
 
 		if (p.isPresent()) {
 			PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
-			file.setMuted(true);
-			p.get().sendMessage(Text.of(TextColors.GOLD, "You are now muted."));
+			file.addMail(sender, message);
+			p.get().sendMessage(Text.of(TextColors.GOLD, "You received mail! Click ", this.getOpenText(), TextColors.GOLD, " to open it."));
 		}
 		else {
 			Optional<PlayerFile> file = super.getCrucialCraft().getPlayerData().getOffline(target.getUniqueId());
-			if (!file.isPresent()) { Messages.NO_SUCH_USER.send(src.get()); return; }
-			file.get().setMuted(true);
+			if (!file.isPresent()) { Messages.NO_SUCH_USER.send(src); return; }
+			file.get().addMail(sender, message);
 		}
+	}
+
+	@Nonnull
+	private Text getOpenText() {
+		return Text.builder().append(Text.of(TextColors.RED, "here")).onHover(TextActions.showText(Text.of(TextColors.GOLD, "Click to open your mail."))).onClick(TextActions.runCommand("/mail read")).build();
 	}
 
 	@Override
 	public String getPermission() {
-		return "cc.mute";
+		return "cc.mail.send";
 	}
 
 	@Override

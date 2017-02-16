@@ -37,7 +37,7 @@ public class CommandNick extends TargetPlayerCommand{
 		}
 
 		PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
-		file.setNick(nick.orElse(null));
+		file.setNick(nick.map(TextUtils::toText).orElse(null));
 	}
 
 	@Override

@@ -116,7 +116,7 @@ public class Config extends CCObject {
 	@Nonnull public Text getTempBanMessage(@Nonnull final Text reason, @Nonnull final Text banner, @Nonnull final String duration) { return TextUtils.toText(this.config.getNode("messages", "tempbanned").getString().replace("%banner", TextUtils.toString(banner)).replace("%reason", TextUtils.toString(reason)).replace("%duration", duration)); }
 
 	@Nonnull
-	public String getChatMessage(@Nonnull final String player, @Nonnull final Subject subject, @Nonnull final String message) {
+	public String getChatMessage(@Nonnull final Text player, @Nonnull final Subject subject, @Nonnull final String message) {
 		String style = this.config.getNode("chat", "style", "format").getString();
 		String format;
 
@@ -129,7 +129,7 @@ public class Config extends CCObject {
 		}
 		else { format = this.getGeneralChatFormat(); }
 
-		format = format.replace("%player", player).replace("%message", message);
+		format = format.replace("%player", TextUtils.toString(player)).replace("%message", message);
 
 		for (Object v : this.config.getNode("chat", "variables").getChildrenMap().keySet()) {
 			String variable = (String) v;

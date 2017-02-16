@@ -6,6 +6,8 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.spongepowered.api.text.Text;
+
 import me.mrdaniel.crucialcraft.teleport.Teleport;
 
 public interface PlayerFile {
@@ -14,8 +16,8 @@ public interface PlayerFile {
 	@Nonnull public Optional<Teleport> getHome(@Nonnull String name);
 	public void setHome(@Nonnull String name, @Nullable Teleport tp);
 
-	@Nonnull public Optional<String> getNick();
-	public void setNick(@Nullable String nick);
+	@Nonnull public Optional<Text> getNick();
+	public void setNick(@Nullable Text nick);
 
 	@Nonnull public Optional<Teleport> getLastLocation();
 	public void setLastLocation(@Nullable Teleport tp);
@@ -41,4 +43,8 @@ public interface PlayerFile {
 
 	public long getLastKitUse(@Nonnull String name);
 	public void setLastKitUse(@Nonnull String name, long time);
+
+	public List<String> getMail();
+	public void addMail(@Nonnull String sender, @Nonnull String message);
+	public void clearMail();
 }

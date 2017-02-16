@@ -10,9 +10,12 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.spongepowered.api.text.Text;
+
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.teleport.Teleport;
+import me.mrdaniel.crucialcraft.utils.TextUtils;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -57,8 +60,12 @@ public class HoconPlayerFile extends CCObject implements PlayerFile {
 		this.save(); 
 	}
 
-	@Nonnull public Optional<String> getNick() { return Optional.ofNullable(this.config.getNode("nick").getString()); }
-	public void setNick(@Nonnull final String nick) { this.config.getNode("nick").setValue(nick); this.save(); }
+	@Nonnull public Optional<Text> getNick() { return Optional.ofNullable(this.config.getNode("nick").getString()).map(TextUtils::toText); }
+	public void setNick(@Nullable final Text nick) {
+		if (nick == null) { this.config.removeChild("nick"); }
+		else { this.config.getNode("nick").setValue(TextUtils.toString(nick)); }
+		this.save();
+	}
 
 	@Nonnull public Optional<Teleport> getLastLocation() { return Teleport.deserialize(this.config.getNode("last_location").getString()); }
 	public void setLastLocation(@Nonnull final Teleport tp) { this.config.getNode("last_location").setValue(tp.serialize()); this.save(); }
@@ -84,4 +91,8 @@ public class HoconPlayerFile extends CCObject implements PlayerFile {
 
 	public long getLastKitUse(@Nonnull final String name) { return this.config.getNode("kits", name).getLong(); }
 	public void setLastKitUse(@Nonnull final String name, final long time) { this.config.getNode("kits", name).setValue(time); this.save(); }
+
+	@Nonnull public List<String> getMail() { return this.config.getNode("mail").getList(obj -> (String)obj); }
+	public void addMail(@Nonnull final String sender, @Nonnull final String message) { List<String> mail = this.getMail(); mail.add(sender + ": " + message); this.config.getNode("mail").setValue(mail); this.save(); }
+	public void clearMail() { this.config.removeChild("mail"); this.save(); }
 }

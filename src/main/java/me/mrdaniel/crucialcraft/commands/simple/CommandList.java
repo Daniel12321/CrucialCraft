@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PermissionCommand;
-import me.mrdaniel.crucialcraft.utils.TextUtils;
 
 public class CommandList extends PermissionCommand {
 
@@ -30,10 +29,11 @@ public class CommandList extends PermissionCommand {
 		if (!src.hasPermission("cc.seevanish")) { players = players.stream().filter(p -> !p.get(Keys.INVISIBLE).orElse(false)).collect(Collectors.toList()); }
 
 		src.sendMessage(Text.of(TextColors.GOLD, "There are ", TextColors.RED, players.size(), " / ", super.getCrucialCraft().getGame().getServer().getMaxPlayers(), TextColors.GOLD, " players online:"));
+		if (players.isEmpty()) { return; }
 
-		Text.Builder txt = Text.builder().append(Text.of(TextColors.RED, TextUtils.toText(super.getCrucialCraft().getPlayerData().get(players.get(0).getUniqueId()).getNick().orElse(players.get(0).getName()))));
+		Text.Builder txt = Text.builder().append(Text.of(TextColors.RED, super.getCrucialCraft().getPlayerData().get(players.get(0).getUniqueId()).getNick().orElse(Text.of(players.get(0).getName()))));
 		for (int i = 1; i < players.size(); i++) {
-			txt.append(Text.of(TextColors.GOLD, ", ", TextColors.RED, TextUtils.toText(super.getCrucialCraft().getPlayerData().get(players.get(i).getUniqueId()).getNick().orElse(players.get(i).getName()))));
+			txt.append(Text.of(TextColors.GOLD, ", ", TextColors.RED, super.getCrucialCraft().getPlayerData().get(players.get(i).getUniqueId()).getNick().orElse(Text.of(players.get(i).getName()))));
 		}
 		src.sendMessage(txt.build());
 	}

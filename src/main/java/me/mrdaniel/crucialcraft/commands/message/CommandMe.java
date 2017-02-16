@@ -12,7 +12,6 @@ import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PermissionCommand;
 import me.mrdaniel.crucialcraft.utils.Messages;
 import me.mrdaniel.crucialcraft.utils.ServerUtils;
-import me.mrdaniel.crucialcraft.utils.TextUtils;
 
 public class CommandMe extends PermissionCommand {
 
@@ -26,7 +25,7 @@ public class CommandMe extends PermissionCommand {
 
 		String message = args.<String>getOne("message").get();
 
-		Text name = (src instanceof Player) ? TextUtils.toText(super.getCrucialCraft().getPlayerData().get(((Player)src).getUniqueId()).getNick().orElse(((Player)src).getName())) : Text.of("Console") ;
+		Text name = (src instanceof Player) ? super.getCrucialCraft().getPlayerData().get(((Player)src).getUniqueId()).getNick().orElse(Text.of(((Player)src).getName())) : Text.of("Console") ;
 		ServerUtils.broadcast(super.getCrucialCraft().getGame().getServer(), Text.of(TextColors.DARK_PURPLE, "* ", name, " ", TextColors.DARK_PURPLE, message));
 	}
 

@@ -8,6 +8,7 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.text.Text;
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
@@ -28,7 +29,7 @@ public class ChatListener extends CCObject {
 
 		Subject subject = p.getContainingCollection().get(p.getIdentifier());
 
-		String name = super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).getNick().orElse(p.getName());
+		Text name = super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).getNick().orElse(Text.of(p.getName()));
 		String msg = super.getCrucialCraft().getConfig().getChatMessage(name, subject, e.getRawMessage().toPlain());
 
 		e.setMessage(TextUtils.toText(msg));

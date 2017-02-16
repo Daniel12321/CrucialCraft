@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -24,17 +25,18 @@ public class CommandPlaytime extends PermissionCommand {
 
 	@Override
 	public void perform(final CommandSource src, final CommandContext args) {
-		if (args.<String>getOne("target").isPresent()) {
-			String name = args.<String>getOne("target").get();
-			Optional<Player> p = super.getCrucialCraft().getGame().getServer().getPlayer(name);
-	
+		Optional<User> u = args.<User>getOne("target");
+
+		if (u.isPresent()) {
+			Optional<Player> p = u.get().getPlayer();
+
 			if (p.isPresent()) {
 				PlayerFile file = super.getCrucialCraft().getPlayerData().get(p.get().getUniqueId());
 				src.sendMessage(Text.of(TextColors.RED, p.get().getName(), TextColors.GOLD, "'s total playtime is ", TextColors.RED, TextUtils.getTimeFormat(file.getCurrentPlaytime()), TextColors.GOLD, "."));
 			}
 			else {
-				Optional<PlayerFile> data = super.getCrucialCraft().getPlayerData().getOffline(name);
-				if (data.isPresent()) { src.sendMessage(Text.of(TextColors.RED, name, TextColors.GOLD, "'s total playtime is ", TextColors.RED, TextUtils.getTimeFormat(data.get().getCurrentPlaytime()), TextColors.GOLD, ".")); }
+				Optional<PlayerFile> data = super.getCrucialCraft().getPlayerData().getOffline(u.get().getUniqueId());
+				if (data.isPresent()) { src.sendMessage(Text.of(TextColors.RED, u.get().getName(), TextColors.GOLD, "'s total playtime is ", TextColors.RED, TextUtils.getTimeFormat(data.get().getCurrentPlaytime()), TextColors.GOLD, ".")); }
 				else { Messages.NO_SUCH_USER.send(src); }
 			}
 		}

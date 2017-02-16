@@ -15,7 +15,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.mrdaniel</groupId>
   <artifactId>crucialcraft</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <name>CrucialCraft</name>
   <repositories>
     <repository>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.spongepowered</groupId>
       <artifactId>spongeapi</artifactId>
-      <version>6.0.0-20170201.184449-36</version>
+      <version>6.0.0-20170208.122041-38</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
