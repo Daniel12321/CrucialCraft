@@ -46,7 +46,7 @@ import me.mrdaniel.crucialcraft.utils.ChoiceMaps;
 
 @Plugin(id = "crucialcraft",
 	name = "CrucialCraft",
-	version = "1.1.1",
+	version = "1.1.2",
 	description = "An easy-to-use plugin with all essential commands",
 	authors = {"Mr_Daniel12321"},
 	url = "https://github.com/Daniel12321/CrucialCraft/releases")
@@ -90,12 +90,16 @@ public class CrucialCraft {
 	public void onInit(@Nullable final GameInitializationEvent e) {
 		this.logger.info("Starting Plugin...");
 
+		long starttime = System.currentTimeMillis();
+
 		if (!Files.exists(this.path)) {
 			try { Files.createDirectories(this.path); }
 			catch (final IOException exc) { this.logger.error("Failed to create root plugin directory: {}", exc); }
 		}
 
 		// Game Object Initialization
+
+		this.logger.info("Loading manager instances...");
 
 		this.playerdata = new HoconPlayerDataManager(this, this.path.resolve("playerdata"));
 		this.config = new Config(this, this.path.resolve("config.conf"));
@@ -105,7 +109,6 @@ public class CrucialCraft {
 		this.teleports = new TeleportManager(this);
 		this.choicemaps = new ChoiceMaps(this);
 
-
 		// Listeners
 
 		this.game.getEventManager().registerListeners(this, new ClientListener(this));
@@ -114,6 +117,7 @@ public class CrucialCraft {
 		this.game.getEventManager().registerListeners(this, new WorldListener(this));
 		if (this.config.isTeleportDelay()) { this.game.getEventManager().registerListeners(this, this.teleports); }
 
+		this.logger.info("Loaded manager instances successfully");
 
 		// Permission Commands
 
@@ -370,7 +374,7 @@ public class CrucialCraft {
 
 		this.logger.info("Registered commands succesfully.");
 
-		this.logger.info("Plugin started succesfully.");
+		this.logger.info("Plugin started succesfully in " + String.valueOf(System.currentTimeMillis() - starttime) + " milliseconds.");
 
 		/*
 		 * Commands: 
@@ -387,6 +391,7 @@ public class CrucialCraft {
 		/*
 		 * Added in v1.1.0: /jump, /seen, /kit, /createkit, /kits
 		 * Added in v1.1.1: /tpa, /tpahere, /tpaall
+		 * Added in v1.1.2: /mail
 		 */
 	}
 
