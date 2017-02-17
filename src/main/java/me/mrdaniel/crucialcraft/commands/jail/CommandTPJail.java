@@ -28,8 +28,7 @@ public class CommandTPJail extends TargetPlayerCommand {
 		if (!jail.isPresent()) { Messages.NO_SUCH_JAIL.send(src.orElse(target)); return; }
 		Teleport tp = jail.get();
 
-		if (tp.teleport(super.getCrucialCraft(), target)) {
-			target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to jail ", TextColors.RED, name, TextColors.GOLD, "."));
+		if (tp.teleport(super.getCrucialCraft(), target, Text.of(TextColors.GOLD, "You were teleported to jail ", TextColors.RED, name, TextColors.GOLD, "."), false)) {
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You teleported ", TextColors.RED, target.getName(), TextColors.GOLD, " to jail ", TextColors.RED, name, TextColors.GOLD, ".")));
 		}
 		else { Messages.TELEPORT_DOESNT_EXIST.send(src.orElse(target)); }

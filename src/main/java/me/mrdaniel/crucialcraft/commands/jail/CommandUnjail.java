@@ -33,8 +33,7 @@ public class CommandUnjail extends TargetUserCommand {
 			file.setJailed(false);
 
 			Optional<Teleport> spawn = super.getCrucialCraft().getDataFile().getSpawn();
-			if (!(spawn.isPresent() && spawn.get().teleport(super.getCrucialCraft(), p.get()))) { p.get().setLocation(p.get().getWorld().getSpawnLocation()); }
-			p.get().sendMessage(Text.of(TextColors.GOLD, "You are no longer jailed."));
+			if (!(spawn.isPresent() && spawn.get().teleport(super.getCrucialCraft(), p.get(), Text.of(TextColors.GOLD, "You are no longer jailed."), true))) { p.get().setLocation(p.get().getWorld().getSpawnLocation()); }
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You unjailed ", TextColors.RED, target.getName(), TextColors.GOLD, ".")));
 		}
 		else {

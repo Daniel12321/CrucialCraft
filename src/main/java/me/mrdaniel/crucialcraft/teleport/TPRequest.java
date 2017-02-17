@@ -41,7 +41,7 @@ public class TPRequest extends CCObject {
 			if (this.denied) { src.sendMessage(Text.of(TextColors.GOLD, "This request was already denied.")); return; }
 			if (System.currentTimeMillis() > this.expires) { Messages.TELEPORT_EXPIRED.send(src); return; }
 			p.sendMessage(this.onclick);
-			super.getCrucialCraft().getTeleportManager().add(p, this.tp, this.ontp);
+			this.tp.teleport(super.getCrucialCraft(), p, this.ontp, false);
 		 });
 	}
 

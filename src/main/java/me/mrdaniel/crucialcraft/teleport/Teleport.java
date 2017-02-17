@@ -8,12 +8,16 @@ import javax.annotation.Nullable;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.entity.Transform;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import com.flowpowered.math.vector.Vector3d;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
+import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class Teleport {
 
@@ -43,17 +47,32 @@ public class Teleport {
 		return Optional.of(new Transform<World>(w.get(), new Vector3d(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0.0), Vector3d.ONE));
 	}
 
-	public boolean teleport(@Nonnull final CrucialCraft cc, @Nonnull final Player p) {
+	public boolean teleport(@Nonnull final CrucialCraft cc, @Nonnull final Player p, @Nullable final Text ontp, final boolean instant) {
 		Optional<World> w = cc.getGame().getServer().getWorld(this.world);
 		if (!w.isPresent()) { return false; }
 
-		Teleport t = new Teleport(p.getLocation(), p.getHeadRotation());
+		if (cc.getConfig().isTeleportDelay() && !instant) {
+			int seconds = cc.getConfig().getTeleportDelay();
+			p.sendMessage(Text.of(TextColors.GOLD, "Teleporting in ", TextColors.RED, seconds, TextColors.GOLD, " seconds..."));
 
-		if (p.setLocationAndRotation(w.get().getLocation(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0))) {
-			cc.getPlayerData().get(p.getUniqueId()).setLastLocation(t);
-			return true;
+			cc.getTeleportManager().add(p, Task.builder().delayTicks(seconds * 20).execute(() -> {
+				Teleport t = new Teleport(p.getLocation(), p.getHeadRotation());
+				if (p.setLocationAndRotation(w.get().getLocation(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0))) {
+					cc.getPlayerData().get(p.getUniqueId()).setLastLocation(t);
+					if (ontp != null) { p.sendMessage(ontp); }
+				}
+				else { Messages.TELEPORT_DOESNT_EXIST.send(p); }
+			}).submit(cc));
 		}
-		return false;
+		else {
+			Teleport t = new Teleport(p.getLocation(), p.getHeadRotation());
+			if (p.setLocationAndRotation(w.get().getLocation(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0))) {
+				cc.getPlayerData().get(p.getUniqueId()).setLastLocation(t);
+				if (ontp != null) { p.sendMessage(ontp); }
+			}
+			else { return false; }
+		}
+		return true;
 	}
 
 	@Nonnull

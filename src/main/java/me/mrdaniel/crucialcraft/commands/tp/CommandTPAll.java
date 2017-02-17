@@ -10,6 +10,7 @@ import org.spongepowered.api.text.format.TextColors;
 import me.mrdaniel.crucialcraft.CrucialCraft;
 import me.mrdaniel.crucialcraft.commands.PlayerCommand;
 import me.mrdaniel.crucialcraft.teleport.Teleport;
+import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandTPAll extends PlayerCommand {
 
@@ -22,7 +23,9 @@ public class CommandTPAll extends PlayerCommand {
 		Teleport tp = new Teleport(target.getLocation(), target.getHeadRotation());
 		super.getCrucialCraft().getGame().getServer().getOnlinePlayers().forEach(p -> {
 			if (!p.equals(target)) {
-				if (tp.teleport(super.getCrucialCraft(), p)) { p.sendMessage(Text.of(TextColors.GOLD, "You were teleported to ", TextColors.RED, target.getName(), TextColors.GOLD, "'s location.")); }
+				if (!tp.teleport(super.getCrucialCraft(), p, Text.of(TextColors.GOLD, "You were teleported to ", TextColors.RED, target.getName(), TextColors.GOLD, "'s location."), false)) {
+					Messages.TELEPORT_DOESNT_EXIST.send(p);
+				}
 			}
 		});
 	}

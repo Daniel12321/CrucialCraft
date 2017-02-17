@@ -24,10 +24,12 @@ public class CommandMailSend extends TargetUserCommand {
 	}
 
 	@Override
-	public void execute(User target, Optional<CommandSource> src, CommandContext args) {
+	public void execute(final User target, final Optional<CommandSource> src, final CommandContext args) {
 		Optional<Player> p = target.getPlayer();
 		String sender = src.get() instanceof Player ? ((Player)src.get()).getName() : "Console";
 		String message = args.<String>getOne("message").get();
+
+		if (message.contains("&") && !src.orElse(p.get()).hasPermission("cc.colors.mail")) { Messages.NO_COLOR_PERMISSION.send(src.orElse(p.get())); return; }
 
 		if (p.isPresent()) {
 			PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());

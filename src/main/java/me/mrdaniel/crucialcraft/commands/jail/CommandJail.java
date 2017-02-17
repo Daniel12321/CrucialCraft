@@ -33,11 +33,10 @@ public class CommandJail extends TargetUserCommand {
 		Teleport teleport = jail.get();
 
 		if (p.isPresent()) {
-			teleport.teleport(super.getCrucialCraft(), p.get());
+			teleport.teleport(super.getCrucialCraft(), p.get(), Text.of(TextColors.GOLD, "You were jailed."), true);
 			PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
 			file.setJailed(true);
 
-			p.get().sendMessage(Text.of(TextColors.GOLD, "You were jailed."));
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You jailed ", TextColors.RED, target.getName(), TextColors.GOLD, " in jail ", TextColors.RED, name, TextColors.GOLD, ".")));
 		}
 		else {

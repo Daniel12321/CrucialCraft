@@ -33,6 +33,9 @@ import me.mrdaniel.crucialcraft.commands.home.*;
 import me.mrdaniel.crucialcraft.commands.item.*;
 import me.mrdaniel.crucialcraft.commands.jail.*;
 import me.mrdaniel.crucialcraft.commands.kits.*;
+import me.mrdaniel.crucialcraft.commands.mail.CommandMailClear;
+import me.mrdaniel.crucialcraft.commands.mail.CommandMailRead;
+import me.mrdaniel.crucialcraft.commands.mail.CommandMailSend;
 import me.mrdaniel.crucialcraft.commands.message.*;
 import me.mrdaniel.crucialcraft.commands.simple.*;
 import me.mrdaniel.crucialcraft.commands.tp.*;
@@ -180,6 +183,9 @@ public class CrucialCraft {
 		CommandSpec kits = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Kits Command")).executor(new CommandKits(this)).build();
 		this.game.getCommandManager().register(this, kits, "kits", "kitlist");
 
+		CommandSpec helpop = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | HelpOp Command")).arguments(GenericArguments.remainingRawJoinedStrings(Text.of("message"))).executor(new CommandHelpop(this)).build();
+		this.game.getCommandManager().register(this, helpop, "helpop", "helpoperator");
+
 
 		// Player Commands
 
@@ -251,6 +257,25 @@ public class CrucialCraft {
 
 		CommandSpec tpaall = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | TPAAll Command")).executor(new CommandTPAAll(this)).build();
 		this.game.getCommandManager().register(this, tpaall, "tpaall");
+
+		CommandSpec dispose = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Dispose Command")).executor(new CommandDispose(this)).build();
+		this.game.getCommandManager().register(this, dispose, "dispose");
+
+		CommandSpec enchant = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Enchant Command")).arguments(GenericArguments.choices(Text.of("type"), this.choicemaps.getEnchantments()), GenericArguments.integer(Text.of("level"))).executor(new CommandEnchant(this)).build();
+		this.game.getCommandManager().register(this, enchant, "enchant", "ench");
+
+		CommandSpec spawner = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Spawner Command")).arguments(GenericArguments.choices(Text.of("type"), this.choicemaps.getEnityTypes())).executor(new CommandSpawner(this)).build();
+		this.game.getCommandManager().register(this, spawner, "spawner", "mobspawner");
+
+		CommandSpec mailsend = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Mail Send Command")).arguments(GenericArguments.userOrSource(Text.of("target")), GenericArguments.remainingRawJoinedStrings(Text.of("message"))).executor(new CommandMailSend(this)).build();
+		CommandSpec mailread = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Mail Read Command")).executor(new CommandMailRead(this)).build();
+		CommandSpec mailclear = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Mail Clear Command")).executor(new CommandMailClear(this)).build();
+		CommandSpec mail = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Mail Command"))
+				.child(mailsend, "send")
+				.child(mailread, "read")
+				.child(mailclear, "clear")
+				.build();
+		this.game.getCommandManager().register(this, mail, "mail");
 
 
 		// Target Player Commands
@@ -353,6 +378,9 @@ public class CrucialCraft {
 		CommandSpec unmute = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Unmute Command")).arguments(GenericArguments.userOrSource(Text.of("target"))).executor(new CommandUnmute(this)).build();
 		this.game.getCommandManager().register(this, unmute, "unmute", "unsilence");
 
+		CommandSpec antioch = CommandSpec.builder().description(Text.of(TextColors.AQUA, "CrucialCraft | Antioch Command")).arguments(GenericArguments.player(Text.of("target"))).executor(new CommandAntioch(this)).build();
+		this.game.getCommandManager().register(this, antioch, "antioch");
+
 
 		// Player Target Player Commands
 
@@ -377,10 +405,10 @@ public class CrucialCraft {
 		this.logger.info("Plugin started succesfully in " + String.valueOf(System.currentTimeMillis() - starttime) + " milliseconds.");
 
 		/*
-		 * Commands: 
-		 * enchant, firework, skull, afk, info, socialspy,
-		 * mail, spawner, antioch, gc, lightning, nuke,
-		 * customtext, tree, bigtree, book,
+		 * Commands:
+		 * firework, skull, afk, info, socialspy,
+		 * spawner, gc, lightning, nuke,
+		 * customtext, book
 		 * 
 		 * /break unimplemented: net.minecraft.world.WorldServer#digBlock is abstract
 		 * 
@@ -391,7 +419,7 @@ public class CrucialCraft {
 		/*
 		 * Added in v1.1.0: /jump, /seen, /kit, /createkit, /kits
 		 * Added in v1.1.1: /tpa, /tpahere, /tpaall
-		 * Added in v1.1.2: /mail
+		 * Added in v1.1.2: /mail, /dispose, /enchant, /helpop, /spawner, /antioch
 		 */
 	}
 

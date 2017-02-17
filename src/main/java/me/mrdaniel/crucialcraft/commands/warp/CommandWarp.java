@@ -32,8 +32,7 @@ public class CommandWarp extends TargetPlayerCommand {
 		if (!tp.isPresent()) { Messages.NO_SUCH_WARP.send(src.orElse(target)); return; }
 		Teleport teleport = tp.get();
 
-		if (teleport.teleport(super.getCrucialCraft(), target)) {
-			target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to warp ", TextColors.RED, name, TextColors.GOLD, "."));
+		if (teleport.teleport(super.getCrucialCraft(), target, Text.of(TextColors.GOLD, "You were teleported to warp ", TextColors.RED, name, TextColors.GOLD, "."), src.isPresent())) {
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You teleported ", TextColors.RED, target.getName(), TextColors.GOLD, " to warp ", TextColors.RED, name, TextColors.GOLD, ".")));
 		}
 		else { Messages.TELEPORT_DOESNT_EXIST.send(src.orElse(target)); }

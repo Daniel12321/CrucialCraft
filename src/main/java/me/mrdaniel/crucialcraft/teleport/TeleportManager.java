@@ -18,7 +18,6 @@ import com.google.common.collect.Maps;
 
 import me.mrdaniel.crucialcraft.CCObject;
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class TeleportManager extends CCObject {
 
@@ -30,19 +29,8 @@ public class TeleportManager extends CCObject {
 		this.teleports = Maps.newHashMap();
 	}
 
-	public void add(@Nonnull final Player p, @Nonnull final Teleport tp, @Nonnull final Text ontp) {
-		if (super.getCrucialCraft().getConfig().isTeleportDelay()) {
-			int seconds = super.getCrucialCraft().getConfig().getTeleportDelay();
-			p.sendMessage(Text.of(TextColors.GOLD, "Teleporting in ", TextColors.RED, seconds, TextColors.GOLD, " seconds..."));
-			this.teleports.put(p.getUniqueId(), Task.builder().delayTicks(super.getCrucialCraft().getConfig().getTeleportDelay() * 20).execute(() -> {
-				if (tp.teleport(super.getCrucialCraft(), p)) { p.sendMessage(ontp); }
-				else { Messages.TELEPORT_DOESNT_EXIST.send(p); }
-			}).submit(super.getCrucialCraft()));
-		}
-		else {
-			tp.teleport(super.getCrucialCraft(), p);
-			p.sendMessage(ontp);
-		}
+	public void add(@Nonnull final Player p, @Nonnull final Task task) {
+		this.teleports.put(p.getUniqueId(), task);
 	}
 
 	@Listener

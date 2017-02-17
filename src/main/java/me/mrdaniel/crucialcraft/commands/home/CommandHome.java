@@ -28,9 +28,7 @@ public class CommandHome extends PlayerCommand {
 		if (!home.isPresent()) { Messages.NO_SUCH_HOME.send(target); return; }
 		Teleport tp = home.get();
 
-		if (!tp.teleport(super.getCrucialCraft(), target)) { Messages.NO_LAST_LOCATION.send(target); return; }
-
-		target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to your home ", TextColors.RED, name, TextColors.GOLD, "."));
+		if (!tp.teleport(super.getCrucialCraft(), target, Text.of(TextColors.GOLD, "You were teleported to your home ", TextColors.RED, name, TextColors.GOLD, "."), false)) { Messages.NO_LAST_LOCATION.send(target); return; }
 	}
 
 	@Override

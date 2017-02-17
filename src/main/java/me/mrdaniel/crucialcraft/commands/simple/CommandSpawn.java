@@ -27,13 +27,10 @@ public class CommandSpawn extends TargetPlayerCommand {
 		if (!sp.isPresent()) { Messages.SPAWN_NOT_SET.send(src.orElse(target)); return; }
 		Teleport spawn = sp.get();
 
-		if (spawn.teleport(super.getCrucialCraft(), target)) {
-			target.sendMessage(Text.of(TextColors.GOLD, "You were teleported to spawn."));
+		if (spawn.teleport(super.getCrucialCraft(), target, Text.of(TextColors.GOLD, "You were teleported to spawn."), src.isPresent())) {
 			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You teleported ", TextColors.RED, target.getName(), TextColors.GOLD, " to spawn.")));
 		}
-		else {
-			Messages.TELEPORT_DOESNT_EXIST.send(target).send(src);
-		}
+		else { Messages.TELEPORT_DOESNT_EXIST.send(target).send(src); }
 	}
 
 	@Override

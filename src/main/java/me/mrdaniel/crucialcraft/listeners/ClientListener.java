@@ -74,8 +74,8 @@ public class ClientListener extends CCObject {
 		ServerUtils.broadcast(super.getCrucialCraft().getGame().getServer(), super.getCrucialCraft().getConfig().getFirstJoinMessage(p.getName()));
 
 		Optional<Teleport> newbiespawn = super.getCrucialCraft().getDataFile().getNewbieSpawn();
-		if (!(newbiespawn.isPresent() && newbiespawn.get().teleport(super.getCrucialCraft(),p))) {
-			super.getCrucialCraft().getDataFile().getSpawn().ifPresent(spawn -> spawn.teleport(super.getCrucialCraft(), p));
+		if (!(newbiespawn.isPresent() && newbiespawn.get().teleport(super.getCrucialCraft(), p, null, true))) {
+			super.getCrucialCraft().getDataFile().getSpawn().ifPresent(spawn -> spawn.teleport(super.getCrucialCraft(), p, null, true));
 		}
 	}
 

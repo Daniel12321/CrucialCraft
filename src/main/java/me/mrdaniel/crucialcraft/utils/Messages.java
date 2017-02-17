@@ -13,6 +13,7 @@ public enum Messages {
 	NOT_PLAYER(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "This command can only be used by players.")),
 	NO_PERMISSION(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You dont have permission to use this command.")),
 	NO_COLOR_PERMISSION(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You dont have permission to use colors.")),
+	NO_UNSAFE_ENCHANT_PERMISSION(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, " You dont have permission to use unsafe enchantments.")),
 	NO_KIT_PERMISSION(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You dont have permission to use this kit.")),
 	NO_ITEM_IN_HAND(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You are not holding any item.")),
 	ITEM_DOESNT_SUPPORT_DURABILITY(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "The item you are holding doesnt support item durability.")),
@@ -37,7 +38,8 @@ public enum Messages {
 	NO_BLOCK_FOUND(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "Failed to find a valid block.")),
 	MUST_SPECIFY_WORLD(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You must specify a world.")),
 	TELEPORT_EXPIRED(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "This teleport request expired.")),
-	MUTED(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You cant talk while muted."))
+	MUTED(Text.of(TextColors.DARK_RED, "Error: ", TextColors.RED, "You cant talk while muted.")),
+	NOT_SPAWNER(Text.of(TextColors.DARK_RED, " Error: ", TextColors.RED, "This block is not a mob spawner."))
 	;
 
 	private final Text message;
