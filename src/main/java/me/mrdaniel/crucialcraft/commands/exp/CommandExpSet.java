@@ -5,36 +5,38 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.TargetPlayerCommand;
+import me.mrdaniel.crucialcraft.command.Argument;
+import me.mrdaniel.crucialcraft.command.Arguments;
+import me.mrdaniel.crucialcraft.command.TargetSelfOrOtherPlayerCommand;
+import me.mrdaniel.crucialcraft.command.exception.CommandException;
 
-public class CommandExpSet extends TargetPlayerCommand {
+public class CommandExpSet extends TargetSelfOrOtherPlayerCommand {
 
 	public CommandExpSet(@Nonnull final CrucialCraft cc) {
-		super(cc);
+		super(cc, Argument.optional(Argument.player(cc, "target")), Argument.integer("exp"));
 	}
 
 	@Override
-	public void execute(final Player target, final Optional<CommandSource> src, final CommandContext args) {
-		int value = args.<Integer>getOne("exp").get();
+	public void execute(final Optional<CommandSource> src, final Player target, final Arguments args) throws CommandException {
+		int value = args.get("exp");
 		target.offer(Keys.TOTAL_EXPERIENCE, value);
 		target.sendMessage(Text.of(TextColors.GOLD, "Your exp was set to ", TextColors.RED, value, TextColors.GOLD, "."));
 		src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You set ", TextColors.RED, target.getName(), TextColors.GOLD, "'s exp to ", TextColors.RED, value, TextColors.GOLD, ".")));
 	}
 
 	@Override
-	public String getPermission() {
-		return "cc.exp.set";
+	public String getName() {
+		return "Exp Set";
 	}
 
 	@Override
-	public boolean canTargetSelf() {
-		return true;
+	public String getPermission() {
+		return "cc.exp.set";
 	}
 }

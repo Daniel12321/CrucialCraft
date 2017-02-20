@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
@@ -13,33 +12,31 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.TargetUserCommand;
-import me.mrdaniel.crucialcraft.io.PlayerFile;
-import me.mrdaniel.crucialcraft.utils.Messages;
+import me.mrdaniel.crucialcraft.command.Argument;
+import me.mrdaniel.crucialcraft.command.Arguments;
+import me.mrdaniel.crucialcraft.command.TargetUserCommand;
+import me.mrdaniel.crucialcraft.command.exception.CommandException;
 
 public class CommandMailSend extends TargetUserCommand {
 
 	public CommandMailSend(@Nonnull final CrucialCraft cc) {
-		super(cc);
+		super(cc, Argument.user(cc, "target"), Argument.remaining("message"));
 	}
 
 	@Override
-	public void execute(final User target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final CommandSource src, final User target, final Arguments args) throws CommandException {
 		Optional<Player> p = target.getPlayer();
-		String sender = src.get() instanceof Player ? ((Player)src.get()).getName() : "Console";
-		String message = args.<String>getOne("message").get();
+		String sender = src instanceof Player ? ((Player)src).getName() : "Console";
+		String message = args.get("message");
 
-		if (message.contains("&") && !src.orElse(p.get()).hasPermission("cc.colors.mail")) { Messages.NO_COLOR_PERMISSION.send(src.orElse(p.get())); return; }
+		if (message.contains("&") && !src.hasPermission("cc.colors.mail")) { throw new CommandException("You dont have permission to use colors."); }
 
 		if (p.isPresent()) {
-			PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
-			file.addMail(sender, message);
+			super.getCrucialCraft().getPlayerData().get(target.getUniqueId()).addMail(sender, message);
 			p.get().sendMessage(Text.of(TextColors.GOLD, "You received mail! Click ", this.getOpenText(), TextColors.GOLD, " to open it."));
 		}
 		else {
-			Optional<PlayerFile> file = super.getCrucialCraft().getPlayerData().getOffline(target.getUniqueId());
-			if (!file.isPresent()) { Messages.NO_SUCH_USER.send(src); return; }
-			file.get().addMail(sender, message);
+			super.getCrucialCraft().getPlayerData().getOffline(target.getUniqueId()).orElseThrow(() -> new CommandException("No user with that name exists.")).addMail(sender, message);
 		}
 	}
 
@@ -54,7 +51,7 @@ public class CommandMailSend extends TargetUserCommand {
 	}
 
 	@Override
-	public boolean canTargetSelf() {
-		return false;
+	public String getName() {
+		return "Mail Send";
 	}
 }

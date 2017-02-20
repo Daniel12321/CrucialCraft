@@ -26,9 +26,9 @@ public class ChoiceMaps extends CCObject {
 		this.entitytypes = Maps.newHashMap();
 		this.enchantments = Maps.newHashMap();
 
-		super.getCrucialCraft().getGame().getRegistry().getAllOf(ItemType.class).forEach(type ->  this.itemtypes.put(type.getName().replaceAll("_", "").replaceAll("minecraft:", "").toLowerCase(), type));
-		super.getCrucialCraft().getGame().getRegistry().getAllOf(EntityType.class).forEach(type ->  this.entitytypes.put(type.getName().replaceAll("_", "").replaceAll("minecraft:", "").toLowerCase(), type));
-		super.getCrucialCraft().getGame().getRegistry().getAllOf(Enchantment.class).forEach(type ->  this.enchantments.put(type.getName().replaceAll("_", "").replaceAll("minecraft:", "").toLowerCase(), type));
+		super.getCrucialCraft().getGame().getRegistry().getAllOf(ItemType.class).forEach(type ->  this.itemtypes.put(type.getName().replace("_", "").replace("minecraft:", "").toLowerCase(), type));
+		super.getCrucialCraft().getGame().getRegistry().getAllOf(EntityType.class).forEach(type ->  this.entitytypes.put(type.getName().replace("_", "").replace("minecraft:", "").toLowerCase(), type));
+		super.getCrucialCraft().getGame().getRegistry().getAllOf(Enchantment.class).forEach(type ->  this.enchantments.put(type.getId().replace("_", "").replace("minecraft:", "").replace("enchantment.", "").toLowerCase(), type));
 	}
 
 	@Nonnull public HashMap<String, ItemType> getItemTypes() { return this.itemtypes; }

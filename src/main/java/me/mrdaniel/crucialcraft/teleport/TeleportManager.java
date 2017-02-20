@@ -33,6 +33,10 @@ public class TeleportManager extends CCObject {
 		this.teleports.put(p.getUniqueId(), task);
 	}
 
+	public void remove(@Nonnull final UUID uuid) {
+		this.teleports.remove(uuid);
+	}
+
 	@Listener
 	public void onMove(final MoveEntityEvent e, @Getter("getTargetEntity") final Entity ent) {
 		if (this.teleports.containsKey(ent.getUniqueId())) {

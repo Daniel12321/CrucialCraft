@@ -51,11 +51,12 @@ public class Teleport {
 		Optional<World> w = cc.getGame().getServer().getWorld(this.world);
 		if (!w.isPresent()) { return false; }
 
-		if (cc.getConfig().isTeleportDelay() && !instant) {
+		if (cc.getConfig().isTeleportDelay() && !instant && !p.hasPermission("cc.bypass.delay.teleport")) {
 			int seconds = cc.getConfig().getTeleportDelay();
 			p.sendMessage(Text.of(TextColors.GOLD, "Teleporting in ", TextColors.RED, seconds, TextColors.GOLD, " seconds..."));
 
 			cc.getTeleportManager().add(p, Task.builder().delayTicks(seconds * 20).execute(() -> {
+				cc.getTeleportManager().remove(p.getUniqueId());
 				Teleport t = new Teleport(p.getLocation(), p.getHeadRotation());
 				if (p.setLocationAndRotation(w.get().getLocation(this.x, this.y, this.z), new Vector3d(this.pitch, this.yaw, 0))) {
 					cc.getPlayerData().get(p.getUniqueId()).setLastLocation(t);

@@ -5,11 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.text.Text;
 
 import me.mrdaniel.crucialcraft.CCObject;
@@ -51,48 +50,25 @@ public class Config extends CCObject {
 	@Nonnull public Text getLogoutMessage(@Nonnull final String playername) { return TextUtils.toText(this.config.getNode("messages", "logout").getString().replace("%player", playername)); }
 	@Nonnull public List<Text> getMotd(@Nonnull final String playername, final int playersonline, final int maxplayers) { return this.config.getNode("messages", "motd").getList(obj -> TextUtils.toText(((String) obj).replace("%player", playername).replace("%online", String.valueOf(playersonline)).replace("%maxplayers", String.valueOf(maxplayers)))); }
 	@Nonnull public List<Text> getRules() { return this.config.getNode("messages", "rules").getList(obj -> TextUtils.toText((String) obj)); }
-	@Nonnull public Text getFirstJoinMessage(@Nonnull final String playername) { return TextUtils.toText(this.config.getNode("messages", "firstjoin").getString().replace("%player", playername)); }
 	@Nonnull public Text getWhitelistMessage() { return TextUtils.toText(this.config.getNode("messages", "whitelist").getString()); }
 	@Nonnull public Text getBanMessage(@Nonnull final Text reason, @Nonnull final Text banner) { return TextUtils.toText(this.config.getNode("messages", "banned").getString().replace("%reason", TextUtils.toString(reason)).replace("%banner", TextUtils.toString(banner))); }
 	@Nonnull public Text getTempBanMessage(@Nonnull final Text reason, @Nonnull final Text banner, @Nonnull final String duration) { return TextUtils.toText(this.config.getNode("messages", "tempbanned").getString().replace("%banner", TextUtils.toString(banner)).replace("%reason", TextUtils.toString(reason)).replace("%duration", duration)); }
 
-	@Nonnull
-	public String getChatMessage(@Nonnull final Text player, @Nonnull final Subject subject, @Nonnull final String message) {
-		String style = this.config.getNode("chat", "style", "format").getString();
-		String format;
+	@Nonnull public Text getFirstJoinMessage(@Nonnull final String playername) { return TextUtils.toText(this.config.getNode("firstjoin", "message").getString().replace("%player", playername)); }
+	public boolean isFirstJoinKit() { return this.config.getNode("firstjoin", "kit", "enabled").getBoolean(); }
+	@Nonnull public String getFirstJoinKit() { return this.config.getNode("firstjoin", "kit", "kit").getString(); }
 
-		if (style.equals("variable-based")) {
-			String variable = this.config.getNode("chat", "style", "variable").getString();
-			Optional<String> value = subject.getOption(variable);
-
-			if (value.isPresent()) { format = this.getVariableChatFormat(value.get()).orElse(this.getGeneralChatFormat()); }
-			else { format = this.getGeneralChatFormat(); }
-		}
-		else { format = this.getGeneralChatFormat(); }
-
-		format = format.replace("%player", TextUtils.toString(player)).replace("%message", message);
-
-		for (Object v : this.config.getNode("chat", "variables").getChildrenMap().keySet()) {
-			String variable = (String) v;
-
-			Optional<String> value = subject.getOption(variable);
-			format = format.replace("%" + variable, value.isPresent() ? this.config.getNode("chat", "variables", variable, "text-before").getString() + value.get() + this.config.getNode("chat", "variables", variable, "text-after").getString() : "");
-		}
-		return format;
-	}
+	@Nonnull public String getChatStyle() { return this.config.getNode("chat", "style", "format").getString(); }
+	@Nonnull public String getChatVariable() { return this.config.getNode("chat", "style", "variable").getString(); }
+	@Nonnull public List<String> getVariables() { return this.config.getNode("chat", "variables").getChildrenMap().keySet().stream().map(obj -> (String)obj).collect(Collectors.toList()); }
+	@Nonnull public String getVariableText(@Nonnull final String variable, @Nonnull final String value) { return this.config.getNode("chat", "variables", variable, "text-before").getString() + value + this.config.getNode("chat", "variables", variable, "text-after").getString(); }
 	@Nonnull public String getGeneralChatFormat() { return this.config.getNode("chat", "format", "general-format").getString(); }
 	@Nonnull public Optional<String> getVariableChatFormat(@Nonnull final String value) { return Optional.ofNullable(this.config.getNode("chat", "format", "variable-based", value).getString()); }
 
-	@Nonnull
-	public int getMaxHomes(@Nonnull final Player p) {
-		Subject subject = p.getContainingCollection().get(p.getIdentifier());
-		String homes = subject.getOption("home").orElse(subject.getOption("homes").orElse(""));
-
-		if (homes.equals("")) { return 0; }
-		else if (homes.equals("-1") || homes.equalsIgnoreCase("unlimited")) { return Integer.MAX_VALUE; }
-		else {
-			try { return Integer.parseInt(homes); }
-			catch (final NumberFormatException exc) { return 0; }
-		}
-	}
+	public boolean isChatEnabled() { return this.config.getNode("modules", "chat").getBoolean(); }
+//	public boolean isEconomyEnabled() { return this.config.getNode("modules", "economy").getBoolean(); }
+	public boolean isHomesEnabled() { return this.config.getNode("modules", "homes").getBoolean(); }
+	public boolean isJailsEnabled() { return this.config.getNode("modules", "jails").getBoolean(); }
+	public boolean isKitsEnabled() { return this.config.getNode("modules", "kits").getBoolean(); }
+	public boolean isWarpsEnabled() { return this.config.getNode("modules", "warps").getBoolean(); }
 }

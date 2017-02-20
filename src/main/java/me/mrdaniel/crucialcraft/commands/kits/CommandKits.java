@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
@@ -14,17 +13,18 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PermissionCommand;
+import me.mrdaniel.crucialcraft.command.Arguments;
+import me.mrdaniel.crucialcraft.command.SimpleCommand;
 import me.mrdaniel.crucialcraft.utils.TextUtils;
 
-public class CommandKits extends PermissionCommand {
+public class CommandKits extends SimpleCommand {
 
 	public CommandKits(@Nonnull final CrucialCraft cc) {
 		super(cc);
 	}
 
 	@Override
-	public void perform(final CommandSource src, final CommandContext args) {
+	public void execute(final CommandSource src, final Arguments args) {
 		List<String> kits = super.getCrucialCraft().getKits().getKits();
 		for (int i = kits.size() - 1; i >= 0; i--) { if (!src.hasPermission("cc.kits." + kits.get(i))) { kits.remove(i); } }
 
@@ -73,7 +73,12 @@ public class CommandKits extends PermissionCommand {
 	}
 
 	@Override
-	public String getPermission() {
+	public String getPermission(@Nonnull final Arguments args) {
 		return "cc.kits.list";
+	}
+
+	@Override
+	public String getName() {
+		return "Kit List";
 	}
 }

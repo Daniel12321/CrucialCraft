@@ -1,5 +1,7 @@
 package me.mrdaniel.crucialcraft.listeners;
 
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.entity.living.player.Player;
@@ -30,8 +32,31 @@ public class ChatListener extends CCObject {
 		Subject subject = p.getContainingCollection().get(p.getIdentifier());
 
 		Text name = super.getCrucialCraft().getPlayerData().get(p.getUniqueId()).getNick().orElse(Text.of(p.getName()));
-		String msg = super.getCrucialCraft().getConfig().getChatMessage(name, subject, e.getRawMessage().toPlain());
+		String msg = this.getChatMessage(name, subject, e.getRawMessage().toPlain());
 
 		e.setMessage(TextUtils.toText(msg));
+	}
+
+	@Nonnull
+	public String getChatMessage(@Nonnull final Text player, @Nonnull final Subject subject, @Nonnull final String message) {
+		String style = super.getCrucialCraft().getConfig().getChatStyle();
+		String format;
+
+		if (style.equals("variable-based")) {
+			String variable = super.getCrucialCraft().getConfig().getChatVariable();
+			Optional<String> value = subject.getOption(variable);
+
+			if (value.isPresent()) { format = super.getCrucialCraft().getConfig().getVariableChatFormat(value.get()).orElse(super.getCrucialCraft().getConfig().getGeneralChatFormat()); }
+			else { format = super.getCrucialCraft().getConfig().getGeneralChatFormat(); }
+		}
+		else { format = super.getCrucialCraft().getConfig().getGeneralChatFormat(); }
+
+		format = format.replace("%player", TextUtils.toString(player)).replace("%message", message);
+
+		for (String variable : super.getCrucialCraft().getConfig().getVariables()) {
+			Optional<String> value = subject.getOption(variable);
+			format = format.replace("%" + variable, value.isPresent() ? super.getCrucialCraft().getConfig().getVariableText(variable, value.get()) : "");
+		}
+		return format;
 	}
 }

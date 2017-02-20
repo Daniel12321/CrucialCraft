@@ -77,6 +77,9 @@ public class ClientListener extends CCObject {
 		if (!(newbiespawn.isPresent() && newbiespawn.get().teleport(super.getCrucialCraft(), p, null, true))) {
 			super.getCrucialCraft().getDataFile().getSpawn().ifPresent(spawn -> spawn.teleport(super.getCrucialCraft(), p, null, true));
 		}
+		if (super.getCrucialCraft().getConfig().isKitsEnabled() && super.getCrucialCraft().getConfig().isFirstJoinKit()) {
+			super.getCrucialCraft().getGame().getCommandManager().process(p, "kit " + super.getCrucialCraft().getConfig().getFirstJoinKit());
+		}
 	}
 
 	@Listener(order = Order.LATE)

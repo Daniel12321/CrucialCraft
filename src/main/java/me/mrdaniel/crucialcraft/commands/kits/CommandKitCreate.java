@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
@@ -13,19 +12,21 @@ import org.spongepowered.api.text.format.TextColors;
 import com.google.common.collect.Lists;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.PlayerCommand;
+import me.mrdaniel.crucialcraft.command.Argument;
+import me.mrdaniel.crucialcraft.command.Arguments;
+import me.mrdaniel.crucialcraft.command.PlayerCommand;
 
 public class CommandKitCreate extends PlayerCommand  {
 
 	public CommandKitCreate(@Nonnull final CrucialCraft cc) {
-		super(cc);
+		super(cc, Argument.string("name"), Argument.integer("time-seconds"), Argument.bool("playtime"));
 	}
 
 	@Override
-	public void execute(final Player target, final CommandContext args) {
-		String name = args.<String>getOne("name").get();
-		int seconds = args.<Integer>getOne("time-seconds").get();
-		boolean playtime = args.<Boolean>getOne("playtime").get();
+	public void execute(final Player target, final Arguments args) {
+		String name = args.get("name");
+		int seconds = args.get("time-seconds");
+		boolean playtime = args.get("playtime");
 
 		List<ItemStack> items = Lists.newArrayList();
 		target.getInventory().slots().forEach(slot -> slot.peek().ifPresent(item -> items.add(item)));
@@ -37,5 +38,10 @@ public class CommandKitCreate extends PlayerCommand  {
 	@Override
 	public String getPermission() {
 		return "cc.kits.create";
+	}
+
+	@Override
+	public String getName() {
+		return "Kit Create";
 	}
 }

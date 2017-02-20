@@ -5,44 +5,39 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
 import me.mrdaniel.crucialcraft.CrucialCraft;
-import me.mrdaniel.crucialcraft.commands.TargetUserCommand;
-import me.mrdaniel.crucialcraft.io.PlayerFile;
+import me.mrdaniel.crucialcraft.command.Argument;
+import me.mrdaniel.crucialcraft.command.Arguments;
+import me.mrdaniel.crucialcraft.command.TargetUserCommand;
+import me.mrdaniel.crucialcraft.command.exception.CommandException;
 import me.mrdaniel.crucialcraft.teleport.Teleport;
-import me.mrdaniel.crucialcraft.utils.Messages;
 
 public class CommandJail extends TargetUserCommand {
 
 	public CommandJail(@Nonnull final CrucialCraft cc) {
-		super(cc);
+		super(cc, Argument.user(cc, "target"));
 	}
 
 	@Override
-	public void execute(final User target, final Optional<CommandSource> src, final CommandContext args) {
+	public void execute(final CommandSource src, final User target, final Arguments args) throws CommandException {
 		Optional<Player> p = target.getPlayer();
 
-		String name = args.<String>getOne("name").get();
-		Optional<Teleport> jail = super.getCrucialCraft().getDataFile().getJail(name);
-		if (!jail.isPresent()) { Messages.NO_SUCH_JAIL.send(src.orElse(p.get())); return; }
-		Teleport teleport = jail.get();
+		String name = args.get("name");
+		Teleport jail = super.getCrucialCraft().getDataFile().getJail(name).orElseThrow(() -> new CommandException("No jail with that name exists."));
 
 		if (p.isPresent()) {
-			teleport.teleport(super.getCrucialCraft(), p.get(), Text.of(TextColors.GOLD, "You were jailed."), true);
-			PlayerFile file = super.getCrucialCraft().getPlayerData().get(target.getUniqueId());
-			file.setJailed(true);
+			jail.teleport(super.getCrucialCraft(), p.get(), Text.of(TextColors.GOLD, "You were jailed."), true);
+			super.getCrucialCraft().getPlayerData().get(target.getUniqueId()).setJailed(true);
 
-			src.ifPresent(s -> s.sendMessage(Text.of(TextColors.GOLD, "You jailed ", TextColors.RED, target.getName(), TextColors.GOLD, " in jail ", TextColors.RED, name, TextColors.GOLD, ".")));
+			src.sendMessage(Text.of(TextColors.GOLD, "You jailed ", TextColors.RED, target.getName(), TextColors.GOLD, " in jail ", TextColors.RED, name, TextColors.GOLD, "."));
 		}
 		else {
-			Optional<PlayerFile> file = super.getCrucialCraft().getPlayerData().getOffline(target.getUniqueId());
-			if (!file.isPresent()) { Messages.NO_SUCH_USER.send(src.get()); return; }
-			file.get().setJailed(true);
+			super.getCrucialCraft().getPlayerData().getOffline(target.getUniqueId()).orElseThrow(() -> new CommandException("No user with that name exists.")).setJailed(true);
 		}
 	}
 
@@ -52,7 +47,7 @@ public class CommandJail extends TargetUserCommand {
 	}
 
 	@Override
-	public boolean canTargetSelf() {
-		return false;
+	public String getName() {
+		return "Jail";
 	}
 }
